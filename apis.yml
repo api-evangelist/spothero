@@ -7,8 +7,7 @@ type: Index
 position: Consumer
 access: 3rd-Party
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
-tags:
-  - API
+tags: []
 created: '2025-02-06'
 modified: '2026-03-16'
 url: >-
@@ -22,8 +21,7 @@ apis:
       and drivers with the largest network of off-street parking facilities in North
       America.
     humanURL: ' https://spothero.com/developers'
-    tags:
-      - API
+    tags: []
     properties:
       - type: Documentation
         url: ' https://spothero.com/developers'
