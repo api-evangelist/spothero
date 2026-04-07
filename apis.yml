@@ -1,9 +1,8 @@
 aid: spothero
 name: SpotHero
 description: >-
-  Our flexible parking API and developer toolkit connects all types of vehicles
-  and drivers with the largest network of off-street parking facilities in North
-  America. 
+  Our flexible parking API and developer toolkit connects all types of vehicles and
+  drivers with the largest network of off-street parking facilities in North America.
 type: Index
 position: Consumer
 access: 3rd-Party
@@ -19,9 +18,9 @@ apis:
   - aid: spothero:spothero
     name: SpotHero
     description: >-
-      Our flexible parking API and developer toolkit connects all types of
-      vehicles and drivers with the largest network of off-street parking
-      facilities in North America. 
+      Our flexible parking API and developer toolkit connects all types of vehicles
+      and drivers with the largest network of off-street parking facilities in North
+      America.
     humanURL: ' https://spothero.com/developers'
     tags:
       - API
