@@ -1,0 +1,50 @@
+{
+  "title": "SpotHero Reservation Structure",
+  "description": "Hierarchical structure of the SpotHero Reservation object",
+  "type": "object",
+  "fields": [
+    {"name": "reservation_id", "type": "string", "description": "Unique reservation identifier (pattern: res_{id})"},
+    {"name": "status", "type": "enum", "values": ["active", "completed", "cancelled", "upcoming"]},
+    {"name": "facility_id", "type": "string", "description": "Reference to parking facility"},
+    {"name": "facility_name", "type": "string", "description": "Human-readable facility name"},
+    {"name": "starts", "type": "datetime", "description": "ISO 8601 reservation start time"},
+    {"name": "ends", "type": "datetime", "description": "ISO 8601 reservation end time"},
+    {
+      "name": "price",
+      "type": "object",
+      "fields": [
+        {"name": "amount", "type": "number", "description": "Numeric price in major units"},
+        {"name": "currency", "type": "string", "description": "ISO 4217 currency code"},
+        {"name": "display", "type": "string", "description": "Formatted display string (e.g., '$15.00')"}
+      ]
+    },
+    {
+      "name": "driver",
+      "type": "object",
+      "fields": [
+        {"name": "first_name", "type": "string", "required": true},
+        {"name": "last_name", "type": "string", "required": true},
+        {"name": "email", "type": "string", "format": "email", "required": true},
+        {"name": "phone", "type": "string", "format": "E.164"}
+      ]
+    },
+    {
+      "name": "vehicle",
+      "type": "object",
+      "fields": [
+        {"name": "type", "type": "enum", "values": ["car", "motorcycle", "oversized"]},
+        {"name": "license_plate", "type": "string"},
+        {"name": "state", "type": "string", "description": "US state or CA province"},
+        {"name": "make", "type": "string"},
+        {"name": "model", "type": "string"},
+        {"name": "color", "type": "string"}
+      ]
+    },
+    {"name": "barcode", "type": "string", "description": "Access barcode value"},
+    {"name": "barcode_format", "type": "string", "description": "QR, Code128, etc."},
+    {"name": "confirmation_code", "type": "string", "description": "Human-readable code (SH-XXXXXX)"},
+    {"name": "partner_reference", "type": "string", "description": "Partner tracking ID"},
+    {"name": "created_at", "type": "datetime"},
+    {"name": "updated_at", "type": "datetime"}
+  ]
+}

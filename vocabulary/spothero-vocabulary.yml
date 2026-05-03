@@ -1,0 +1,180 @@
+vocabulary:
+  name: SpotHero Parking Vocabulary
+  description: >-
+    Domain vocabulary for the SpotHero parking platform, covering parking operations,
+    facility types, reservation management, mobility integrations, and pricing concepts.
+  version: "1.0.0"
+  created: "2026-05-02"
+  modified: "2026-05-02"
+  provider: SpotHero
+  domain: Parking
+
+terms:
+  - term: Facility
+    definition: >-
+      A physical parking location within SpotHero's network, which may be a garage,
+      surface lot, valet stand, or street parking area operated by a third-party operator.
+    tags: [Parking, Infrastructure]
+    aliases: [parking facility, parking location, parking venue]
+
+  - term: Reservation
+    definition: >-
+      A confirmed booking for parking at a specific facility during a specified time period.
+      Includes a barcode or QR code for contactless facility access.
+    tags: [Booking, Commerce]
+    aliases: [booking, parking pass, parking reservation]
+
+  - term: Rate
+    definition: >-
+      A pricing structure for parking at a facility. May be hourly, daily, overnight,
+      event-based, or monthly. Each rate has validity windows and applicable vehicle types.
+    tags: [Pricing, Commerce]
+    aliases: [pricing, parking rate, rate plan]
+
+  - term: Availability
+    definition: >-
+      Real-time status of open parking spaces at a facility for a given time period.
+      Includes both a boolean available flag and an estimate of spaces remaining.
+    tags: [Inventory, Real-Time]
+
+  - term: Barcode
+    definition: >-
+      A machine-readable code (typically QR or Code128 format) issued with each reservation
+      that allows the driver to access and exit the parking facility without a physical ticket.
+    tags: [Access, Technology]
+    aliases: [QR code, parking pass barcode]
+
+  - term: Confirmation Code
+    definition: >-
+      A human-readable alphanumeric identifier for a reservation, prefixed with "SH-".
+      Used by drivers and facility staff to locate and verify reservations.
+    tags: [Reference, Booking]
+
+  - term: Early Bird Rate
+    definition: >-
+      A discounted parking rate available when a driver enters the facility before a
+      specified morning cutoff time and exits before a specified afternoon cutoff time.
+    tags: [Pricing, Promotion]
+
+  - term: Partner
+    definition: >-
+      A third-party company integrated with SpotHero via API to offer parking to their
+      own users. Partners include navigation apps, rideshare platforms, connected car
+      providers, and event ticketing services.
+    tags: [Integration, Business]
+    aliases: [API partner, developer partner]
+
+  - term: SpotNow
+    definition: >-
+      SpotHero's real-time parking technology layer, originally developed as an open-source
+      Kotlin server, enabling instant availability checks and on-demand parking bookings.
+    tags: [Technology, Real-Time]
+
+  - term: Web Widget
+    definition: >-
+      A copy-and-paste JavaScript embed that partners can add to their website to surface
+      SpotHero's parking search and booking experience without deep API integration.
+    tags: [Integration, Frontend]
+    aliases: [parking widget, embed widget]
+
+  - term: Parking Link
+    definition: >-
+      A deep-link URL routing mechanism that sends end-users directly to the SpotHero app
+      or website to complete a parking search and booking with minimal partner development.
+    tags: [Integration, Routing]
+
+  - term: Vehicle Type
+    definition: >-
+      Classification of vehicles for parking purposes: car (standard passenger vehicle),
+      motorcycle (two-wheeled), and oversized (trucks, SUVs, vehicles exceeding standard dimensions).
+    tags: [Vehicle, Classification]
+
+  - term: Operator
+    definition: >-
+      The parking management company or garage owner responsible for operating a SpotHero
+      network facility. Operators set pricing, manage access, and provide customer support on-site.
+    tags: [Business, Operations]
+
+  - term: Geocoordinates
+    definition: >-
+      Latitude/longitude pair used to pinpoint a parking facility's location or a driver's
+      search origin. SpotHero uses WGS84 coordinate system.
+    tags: [Location, Geospatial]
+    aliases: [coordinates, lat/lng]
+
+  - term: Partner Reference
+    definition: >-
+      An optional partner-supplied identifier passed when creating a reservation, allowing
+      partners to correlate SpotHero reservations with their own order or booking IDs.
+    tags: [Integration, Reference]
+    aliases: [external reference, order reference]
+
+  - term: Cancellation Policy
+    definition: >-
+      The rules governing refund eligibility when a reservation is cancelled. Policies
+      vary by facility and rate type, with some rates being fully refundable and others non-refundable.
+    tags: [Policy, Commerce]
+
+  - term: Off-Street Parking
+    definition: >-
+      Parking facilities located away from the public street, including garages, covered lots,
+      and surface lots, as opposed to metered street parking.
+    tags: [Parking, Infrastructure]
+
+  - term: Monthly Parking
+    definition: >-
+      A recurring parking arrangement where a driver purchases a monthly permit for regular
+      access to a facility, typically at a lower effective daily rate than transient parking.
+    tags: [Pricing, Subscription]
+
+  - term: Amenity
+    definition: >-
+      A feature or service available at a parking facility that enhances the driver experience,
+      such as covered parking, EV charging, handicap accessibility, valet service, or car wash.
+    tags: [Facility, Features]
+
+  - term: Transient Parking
+    definition: >-
+      Short-term parking billed hourly or daily for non-recurring visits, as opposed to
+      monthly or permit-based parking arrangements.
+    tags: [Pricing, Parking]
+
+classifications:
+  facility_types:
+    - garage
+    - surface_lot
+    - covered_lot
+    - valet
+    - street
+  vehicle_types:
+    - car
+    - motorcycle
+    - oversized
+    - monthly
+  reservation_statuses:
+    - active
+    - upcoming
+    - completed
+    - cancelled
+  rate_types:
+    - hourly
+    - daily
+    - overnight
+    - event
+    - monthly
+    - early_bird
+  amenity_types:
+    - covered
+    - outdoor
+    - indoor
+    - valet
+    - self_park
+    - handicap_accessible
+    - ev_charging
+    - attendant_on_duty
+    - 24_hour_security
+    - monthly_available
+    - oversized_vehicles
+    - motorcycle
+    - car_wash
+    - restrooms

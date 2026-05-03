@@ -1,0 +1,69 @@
+{
+  "operation": "create-reservation",
+  "request": {
+    "method": "POST",
+    "url": "https://api.spothero.com/v2/reservations",
+    "headers": {
+      "X-API-Key": "{{SPOTHERO_API_KEY}}",
+      "Content-Type": "application/json",
+      "Accept": "application/json"
+    },
+    "body": {
+      "facility_id": "fac_abc123",
+      "rate_id": "rate_early_bird",
+      "starts": "2026-06-01T09:00:00Z",
+      "ends": "2026-06-01T17:00:00Z",
+      "driver": {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane.smith@example.com",
+        "phone": "+13125551234"
+      },
+      "vehicle": {
+        "type": "car",
+        "license_plate": "ABC1234",
+        "state": "IL",
+        "make": "Toyota",
+        "model": "Camry",
+        "color": "Blue"
+      },
+      "partner_reference": "order_99887766"
+    }
+  },
+  "response": {
+    "status": 201,
+    "body": {
+      "reservation_id": "res_xyz789",
+      "status": "upcoming",
+      "facility_id": "fac_abc123",
+      "facility_name": "Millennium Park Garage",
+      "starts": "2026-06-01T09:00:00Z",
+      "ends": "2026-06-01T17:00:00Z",
+      "price": {
+        "amount": 12.00,
+        "currency": "USD",
+        "display": "$12.00"
+      },
+      "driver": {
+        "first_name": "Jane",
+        "last_name": "Smith",
+        "email": "jane.smith@example.com",
+        "phone": "+13125551234"
+      },
+      "vehicle": {
+        "type": "car",
+        "license_plate": "ABC1234",
+        "state": "IL",
+        "make": "Toyota",
+        "model": "Camry",
+        "color": "Blue"
+      },
+      "barcode": "SH789XYZ123456",
+      "barcode_format": "QR",
+      "confirmation_code": "SH-XYZ789",
+      "partner_reference": "order_99887766",
+      "created_at": "2026-05-02T14:30:00Z",
+      "updated_at": "2026-05-02T14:30:00Z"
+    }
+  }
+}

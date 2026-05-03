@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.spothero.com/schemas/facility",
+  "title": "SpotHero Facility",
+  "description": "Schema for a SpotHero parking facility, including location, amenities, operating hours, and capacity.",
+  "type": "object",
+  "properties": {
+    "facility_id": {
+      "type": "string",
+      "description": "Unique facility identifier",
+      "examples": ["fac_abc123"]
+    },
+    "name": {
+      "type": "string",
+      "description": "Facility name",
+      "examples": ["Millennium Park Garage"]
+    },
+    "description": {
+      "type": "string",
+      "description": "Facility description and access instructions"
+    },
+    "address": {
+      "type": "object",
+      "properties": {
+        "street": {"type": "string"},
+        "city": {"type": "string"},
+        "state": {"type": "string"},
+        "zip": {"type": "string"},
+        "country": {"type": "string", "default": "US"}
+      },
+      "required": ["street", "city", "state", "zip"]
+    },
+    "coordinates": {
+      "type": "object",
+      "properties": {
+        "latitude": {
+          "type": "number",
+          "minimum": -90,
+          "maximum": 90
+        },
+        "longitude": {
+          "type": "number",
+          "minimum": -180,
+          "maximum": 180
+        }
+      },
+      "required": ["latitude", "longitude"]
+    },
+    "phone": {
+      "type": "string",
+      "description": "Facility phone number in E.164 format"
+    },
+    "hours": {
+      "type": "object",
+      "description": "Operating hours by day of the week",
+      "properties": {
+        "is_24_hours": {"type": "boolean"},
+        "monday": {"$ref": "#/$defs/dayHours"},
+        "tuesday": {"$ref": "#/$defs/dayHours"},
+        "wednesday": {"$ref": "#/$defs/dayHours"},
+        "thursday": {"$ref": "#/$defs/dayHours"},
+        "friday": {"$ref": "#/$defs/dayHours"},
+        "saturday": {"$ref": "#/$defs/dayHours"},
+        "sunday": {"$ref": "#/$defs/dayHours"}
+      }
+    },
+    "amenities": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": [
+          "covered", "outdoor", "indoor", "valet", "self_park",
+          "handicap_accessible", "ev_charging", "attendant_on_duty",
+          "24_hour_security", "monthly_available", "oversized_vehicles",
+          "motorcycle", "car_wash", "restrooms"
+        ]
+      },
+      "description": "List of available amenities"
+    },
+    "capacity": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total parking capacity"
+    },
+    "entry_instructions": {
+      "type": "string"
+    },
+    "exit_instructions": {
+      "type": "string"
+    },
+    "rating": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 5
+    },
+    "review_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "operator": {
+      "type": "string",
+      "description": "Parking operator or management company name"
+    },
+    "facility_type": {
+      "type": "string",
+      "enum": ["garage", "lot", "street", "valet"],
+      "description": "Type of parking facility"
+    }
+  },
+  "required": ["facility_id", "name", "address", "coordinates"],
+  "$defs": {
+    "dayHours": {
+      "type": "object",
+      "properties": {
+        "open": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+        },
+        "close": {
+          "type": "string",
+          "pattern": "^([01]\\d|2[0-3]):[0-5]\\d$"
+        },
+        "closed": {
+          "type": "boolean"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://api.spothero.com/schemas/reservation",
+  "title": "SpotHero Reservation",
+  "description": "Schema for a SpotHero parking reservation, including booking details, driver information, vehicle details, and access credentials.",
+  "type": "object",
+  "properties": {
+    "reservation_id": {
+      "type": "string",
+      "description": "Unique SpotHero reservation identifier",
+      "pattern": "^res_[a-z0-9]+$",
+      "examples": ["res_xyz789"]
+    },
+    "status": {
+      "type": "string",
+      "enum": ["active", "completed", "cancelled", "upcoming"],
+      "description": "Current reservation status"
+    },
+    "facility_id": {
+      "type": "string",
+      "description": "Unique identifier for the parking facility",
+      "examples": ["fac_abc123"]
+    },
+    "facility_name": {
+      "type": "string",
+      "description": "Name of the parking facility"
+    },
+    "starts": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Reservation start time in ISO 8601 format"
+    },
+    "ends": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Reservation end time in ISO 8601 format"
+    },
+    "price": {
+      "type": "object",
+      "description": "Total price for the reservation",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "minimum": 0,
+          "description": "Price amount in major currency units"
+        },
+        "currency": {
+          "type": "string",
+          "pattern": "^[A-Z]{3}$",
+          "description": "Currency code (ISO 4217)"
+        },
+        "display": {
+          "type": "string",
+          "description": "Human-readable price string"
+        }
+      },
+      "required": ["amount", "currency"]
+    },
+    "driver": {
+      "type": "object",
+      "description": "Driver information for the reservation",
+      "properties": {
+        "first_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "last_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "email": {
+          "type": "string",
+          "format": "email"
+        },
+        "phone": {
+          "type": "string",
+          "pattern": "^\\+?[1-9]\\d{1,14}$"
+        }
+      },
+      "required": ["first_name", "last_name", "email"]
+    },
+    "vehicle": {
+      "type": "object",
+      "description": "Vehicle information associated with the reservation",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": ["car", "motorcycle", "oversized"],
+          "default": "car"
+        },
+        "license_plate": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string",
+          "maxLength": 3
+        },
+        "make": {
+          "type": "string"
+        },
+        "model": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "barcode": {
+      "type": "string",
+      "description": "Barcode value for facility access"
+    },
+    "barcode_format": {
+      "type": "string",
+      "description": "Barcode format",
+      "examples": ["QR", "Code128"]
+    },
+    "confirmation_code": {
+      "type": "string",
+      "description": "Human-readable confirmation code",
+      "pattern": "^SH-[A-Z0-9]+$",
+      "examples": ["SH-ABC123"]
+    },
+    "partner_reference": {
+      "type": "string",
+      "description": "Partner-side reference identifier for tracking"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time"
+    }
+  },
+  "required": ["reservation_id", "status", "facility_id", "starts", "ends", "price", "driver"],
+  "additionalProperties": false
+}

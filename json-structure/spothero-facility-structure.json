@@ -1,0 +1,52 @@
+{
+  "title": "SpotHero Facility Structure",
+  "description": "Hierarchical structure of the SpotHero Facility object",
+  "type": "object",
+  "fields": [
+    {"name": "facility_id", "type": "string", "description": "Unique identifier (pattern: fac_{id})"},
+    {"name": "name", "type": "string", "description": "Facility display name"},
+    {"name": "description", "type": "string", "description": "Access instructions and details"},
+    {
+      "name": "address",
+      "type": "object",
+      "fields": [
+        {"name": "street", "type": "string", "required": true},
+        {"name": "city", "type": "string", "required": true},
+        {"name": "state", "type": "string", "required": true},
+        {"name": "zip", "type": "string", "required": true},
+        {"name": "country", "type": "string", "default": "US"}
+      ]
+    },
+    {
+      "name": "coordinates",
+      "type": "object",
+      "fields": [
+        {"name": "latitude", "type": "number", "range": [-90, 90]},
+        {"name": "longitude", "type": "number", "range": [-180, 180]}
+      ]
+    },
+    {"name": "phone", "type": "string", "format": "E.164"},
+    {
+      "name": "hours",
+      "type": "object",
+      "fields": [
+        {"name": "is_24_hours", "type": "boolean"},
+        {"name": "monday", "type": "object", "fields": [{"name": "open", "type": "string"}, {"name": "close", "type": "string"}, {"name": "closed", "type": "boolean"}]},
+        {"name": "tuesday", "type": "object", "description": "Same structure as monday"},
+        {"name": "wednesday", "type": "object", "description": "Same structure as monday"},
+        {"name": "thursday", "type": "object", "description": "Same structure as monday"},
+        {"name": "friday", "type": "object", "description": "Same structure as monday"},
+        {"name": "saturday", "type": "object", "description": "Same structure as monday"},
+        {"name": "sunday", "type": "object", "description": "Same structure as monday"}
+      ]
+    },
+    {"name": "amenities", "type": "array", "items": "string", "description": "covered, ev_charging, valet, etc."},
+    {"name": "capacity", "type": "integer", "description": "Total parking spaces"},
+    {"name": "entry_instructions", "type": "string"},
+    {"name": "exit_instructions", "type": "string"},
+    {"name": "rating", "type": "number", "range": [0, 5]},
+    {"name": "review_count", "type": "integer"},
+    {"name": "operator", "type": "string"},
+    {"name": "facility_type", "type": "enum", "values": ["garage", "lot", "street", "valet"]}
+  ]
+}

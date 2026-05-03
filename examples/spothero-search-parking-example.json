@@ -1,0 +1,77 @@
+{
+  "operation": "search-parking",
+  "request": {
+    "method": "GET",
+    "url": "https://api.spothero.com/v2/search",
+    "headers": {
+      "X-API-Key": "{{SPOTHERO_API_KEY}}",
+      "Accept": "application/json"
+    },
+    "parameters": {
+      "latitude": 41.8827,
+      "longitude": -87.6233,
+      "starts": "2026-06-01T09:00:00Z",
+      "ends": "2026-06-01T17:00:00Z",
+      "radius": 0.5,
+      "vehicle_type": "car",
+      "sort": "price",
+      "limit": 10
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "results": [
+        {
+          "facility_id": "fac_abc123",
+          "name": "Millennium Park Garage",
+          "address": {
+            "street": "12 S Michigan Ave",
+            "city": "Chicago",
+            "state": "IL",
+            "zip": "60603",
+            "country": "US"
+          },
+          "distance_miles": 0.2,
+          "price": {
+            "amount": 12.00,
+            "currency": "USD",
+            "display": "$12.00"
+          },
+          "availability": {
+            "available": true,
+            "spaces_available": 45
+          },
+          "amenities": ["covered", "handicap_accessible", "ev_charging"],
+          "rating": 4.3
+        },
+        {
+          "facility_id": "fac_def456",
+          "name": "Grant Park North Garage",
+          "address": {
+            "street": "25 N Michigan Ave",
+            "city": "Chicago",
+            "state": "IL",
+            "zip": "60601",
+            "country": "US"
+          },
+          "distance_miles": 0.4,
+          "price": {
+            "amount": 15.00,
+            "currency": "USD",
+            "display": "$15.00"
+          },
+          "availability": {
+            "available": true,
+            "spaces_available": 120
+          },
+          "amenities": ["covered", "24_hour_security"],
+          "rating": 4.1
+        }
+      ],
+      "total": 14,
+      "offset": 0,
+      "limit": 10
+    }
+  }
+}
