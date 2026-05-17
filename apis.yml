@@ -45,7 +45,7 @@ apis:
         url: https://spothero.com/developers
       - type: Developer Portal
         url: https://api.spothero.com/v2/docs
-      - type: Getting Started
+      - type: GettingStarted
         url: https://spothero.com/developers
       - type: OpenAPI
         url: openapi/spothero-parking-openapi.yml
@@ -110,9 +110,9 @@ common:
     url: https://spothero.com/developers
   - type: Developer Portal
     url: https://api.spothero.com/v2/docs
-  - type: Terms of Service
+  - type: TermsOfService
     url: https://spothero.com/terms
-  - type: Privacy Policy
+  - type: PrivacyPolicy
     url: https://spothero.com/privacy
   - type: Website
     url: https://spothero.com
