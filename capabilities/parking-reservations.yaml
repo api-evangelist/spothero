@@ -1,0 +1,223 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: SpotHero Parking API — Reservations
+  description: 'SpotHero Parking API — Reservations. 4 operations. Lead operation: List Reservations. Self-contained Naftiko
+    capability covering one Spothero business surface.'
+  tags:
+  - Spothero
+  - Reservations
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SPOTHERO_API_KEY: SPOTHERO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: parking-reservations
+    baseUri: https://api.spothero.com/v2
+    description: SpotHero Parking API — Reservations business capability. Self-contained, no shared references.
+    resources:
+    - name: reservations
+      path: /reservations
+      operations:
+      - name: listreservations
+        method: GET
+        description: List Reservations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: status
+          in: query
+          type: string
+          description: Filter by reservation status
+        - name: starts_after
+          in: query
+          type: string
+          description: Filter reservations starting after this date
+        - name: starts_before
+          in: query
+          type: string
+          description: Filter reservations starting before this date
+        - name: facility_id
+          in: query
+          type: string
+          description: Filter by facility ID
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of results to return
+        - name: offset
+          in: query
+          type: integer
+          description: Number of results to skip for pagination
+      - name: createreservation
+        method: POST
+        description: Create Reservation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: reservations-reservation_id
+      path: /reservations/{reservation_id}
+      operations:
+      - name: getreservation
+        method: GET
+        description: Get Reservation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reservation_id
+          in: path
+          type: string
+          description: Unique identifier for the reservation
+          required: true
+      - name: cancelreservation
+        method: DELETE
+        description: Cancel Reservation
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: reservation_id
+          in: path
+          type: string
+          description: Unique identifier for the reservation
+          required: true
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.SPOTHERO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: parking-reservations-rest
+    port: 8080
+    description: REST adapter for SpotHero Parking API — Reservations. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/reservations
+      name: reservations
+      description: REST surface for reservations.
+      operations:
+      - method: GET
+        name: listreservations
+        description: List Reservations
+        call: parking-reservations.listreservations
+        with:
+          status: rest.status
+          starts_after: rest.starts_after
+          starts_before: rest.starts_before
+          facility_id: rest.facility_id
+          limit: rest.limit
+          offset: rest.offset
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createreservation
+        description: Create Reservation
+        call: parking-reservations.createreservation
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/reservations/{reservation-id}
+      name: reservations-reservation-id
+      description: REST surface for reservations-reservation_id.
+      operations:
+      - method: GET
+        name: getreservation
+        description: Get Reservation
+        call: parking-reservations.getreservation
+        with:
+          reservation_id: rest.reservation_id
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: cancelreservation
+        description: Cancel Reservation
+        call: parking-reservations.cancelreservation
+        with:
+          reservation_id: rest.reservation_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: parking-reservations-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for SpotHero Parking API — Reservations. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-reservations
+      description: List Reservations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: parking-reservations.listreservations
+      with:
+        status: tools.status
+        starts_after: tools.starts_after
+        starts_before: tools.starts_before
+        facility_id: tools.facility_id
+        limit: tools.limit
+        offset: tools.offset
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-reservation
+      description: Create Reservation
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: parking-reservations.createreservation
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-reservation
+      description: Get Reservation
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: parking-reservations.getreservation
+      with:
+        reservation_id: tools.reservation_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: cancel-reservation
+      description: Cancel Reservation
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: parking-reservations.cancelreservation
+      with:
+        reservation_id: tools.reservation_id
+      outputParameters:
+      - type: object
+        mapping: $.

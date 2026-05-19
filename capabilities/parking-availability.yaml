@@ -1,0 +1,102 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: SpotHero Parking API — Availability
+  description: 'SpotHero Parking API — Availability. 1 operations. Lead operation: Get Facility Availability. Self-contained
+    Naftiko capability covering one Spothero business surface.'
+  tags:
+  - Spothero
+  - Availability
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SPOTHERO_API_KEY: SPOTHERO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: parking-availability
+    baseUri: https://api.spothero.com/v2
+    description: SpotHero Parking API — Availability business capability. Self-contained, no shared references.
+    resources:
+    - name: facilities-facility_id-availability
+      path: /facilities/{facility_id}/availability
+      operations:
+      - name: getfacilityavailability
+        method: GET
+        description: Get Facility Availability
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: facility_id
+          in: path
+          type: string
+          description: Unique identifier for the parking facility
+          required: true
+        - name: starts
+          in: query
+          type: string
+          description: Start time for availability check in ISO 8601 format
+          required: true
+        - name: ends
+          in: query
+          type: string
+          description: End time for availability check in ISO 8601 format
+          required: true
+        - name: vehicle_type
+          in: query
+          type: string
+          description: Type of vehicle
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.SPOTHERO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: parking-availability-rest
+    port: 8080
+    description: REST adapter for SpotHero Parking API — Availability. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/facilities/{facility-id}/availability
+      name: facilities-facility-id-availability
+      description: REST surface for facilities-facility_id-availability.
+      operations:
+      - method: GET
+        name: getfacilityavailability
+        description: Get Facility Availability
+        call: parking-availability.getfacilityavailability
+        with:
+          facility_id: rest.facility_id
+          starts: rest.starts
+          ends: rest.ends
+          vehicle_type: rest.vehicle_type
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: parking-availability-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for SpotHero Parking API — Availability. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: get-facility-availability
+      description: Get Facility Availability
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: parking-availability.getfacilityavailability
+      with:
+        facility_id: tools.facility_id
+        starts: tools.starts
+        ends: tools.ends
+        vehicle_type: tools.vehicle_type
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,131 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: SpotHero Parking API — Search
+  description: 'SpotHero Parking API — Search. 1 operations. Lead operation: Search Parking Locations. Self-contained Naftiko
+    capability covering one Spothero business surface.'
+  tags:
+  - Spothero
+  - Search
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SPOTHERO_API_KEY: SPOTHERO_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: parking-search
+    baseUri: https://api.spothero.com/v2
+    description: SpotHero Parking API — Search business capability. Self-contained, no shared references.
+    resources:
+    - name: search
+      path: /search
+      operations:
+      - name: searchparking
+        method: GET
+        description: Search Parking Locations
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: latitude
+          in: query
+          type: number
+          description: Latitude of the search center point
+        - name: longitude
+          in: query
+          type: number
+          description: Longitude of the search center point
+        - name: address
+          in: query
+          type: string
+          description: Street address or point of interest name to search near
+        - name: starts
+          in: query
+          type: string
+          description: Parking start time in ISO 8601 format
+          required: true
+        - name: ends
+          in: query
+          type: string
+          description: Parking end time in ISO 8601 format
+          required: true
+        - name: radius
+          in: query
+          type: number
+          description: Search radius in miles (default 0.5)
+        - name: vehicle_type
+          in: query
+          type: string
+          description: Type of vehicle
+        - name: limit
+          in: query
+          type: integer
+          description: Maximum number of results to return
+        - name: sort
+          in: query
+          type: string
+          description: Sort order for results
+    authentication:
+      type: apikey
+      key: X-API-Key
+      value: '{{env.SPOTHERO_API_KEY}}'
+      placement: header
+  exposes:
+  - type: rest
+    namespace: parking-search-rest
+    port: 8080
+    description: REST adapter for SpotHero Parking API — Search. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/search
+      name: search
+      description: REST surface for search.
+      operations:
+      - method: GET
+        name: searchparking
+        description: Search Parking Locations
+        call: parking-search.searchparking
+        with:
+          latitude: rest.latitude
+          longitude: rest.longitude
+          address: rest.address
+          starts: rest.starts
+          ends: rest.ends
+          radius: rest.radius
+          vehicle_type: rest.vehicle_type
+          limit: rest.limit
+          sort: rest.sort
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: parking-search-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for SpotHero Parking API — Search. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: search-parking-locations
+      description: Search Parking Locations
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: parking-search.searchparking
+      with:
+        latitude: tools.latitude
+        longitude: tools.longitude
+        address: tools.address
+        starts: tools.starts
+        ends: tools.ends
+        radius: tools.radius
+        vehicle_type: tools.vehicle_type
+        limit: tools.limit
+        sort: tools.sort
+      outputParameters:
+      - type: object
+        mapping: $.
