@@ -41,7 +41,7 @@ apis:
     properties:
       - type: Documentation
         url: https://spothero.com/developers
-      - type: Developer Portal
+      - type: DeveloperPortal
         url: https://api.spothero.com/v2/docs
       - type: GettingStarted
         url: https://spothero.com/developers
@@ -108,7 +108,7 @@ common:
     url: https://www.linkedin.com/company/spothero
   - type: Documentation
     url: https://spothero.com/developers
-  - type: Developer Portal
+  - type: DeveloperPortal
     url: https://api.spothero.com/v2/docs
   - type: TermsOfService
     url: https://spothero.com/terms
