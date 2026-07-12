@@ -104,6 +104,10 @@ apis:
       - type: Repository
         url: https://github.com/spothero/herolab-spotnow
 common:
+  - type: DomainSecurity
+    url: security/spothero-domain-security.yml
+  - type: Authentication
+    url: authentication/spothero-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/spothero
   - type: Documentation
@@ -134,6 +138,8 @@ common:
     url: capabilities/parking-mobility.yaml
   - type: Vocabulary
     url: vocabulary/spothero-vocabulary.yml
+  - url: https://blog.spothero.com/feed/
+    type: Blog
 maintainers:
   - FN: Kin Lane
     email: kin@apievangelist.com
