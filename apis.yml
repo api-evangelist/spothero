@@ -104,6 +104,8 @@ apis:
       - type: Repository
         url: https://github.com/spothero/herolab-spotnow
 common:
+  - type: AgenticAccess
+    url: agentic-access/spothero-agentic-access.yml
   - type: DomainSecurity
     url: security/spothero-domain-security.yml
   - type: Authentication
