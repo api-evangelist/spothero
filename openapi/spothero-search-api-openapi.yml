@@ -1,0 +1,259 @@
+openapi: 3.0.3
+info:
+  title: SpotHero Parking Availability Search API
+  description: The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.
+  version: 2.0.0
+  termsOfService: https://spothero.com/terms
+  contact:
+    name: SpotHero Partner Support
+    email: partner.support@spothero.com
+    url: https://spothero.com/developers
+  license:
+    name: Proprietary
+    url: https://spothero.com/terms
+servers:
+- url: https://api.spothero.com/v2
+  description: SpotHero API v2 Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Search
+  description: Search for available parking locations and facilities
+paths:
+  /search:
+    get:
+      operationId: search-parking
+      tags:
+      - Search
+      summary: Search Parking Locations
+      description: Search for available parking locations near a given address, coordinates, or point of interest. Returns a list of facilities with availability and pricing for the requested time period.
+      parameters:
+      - name: latitude
+        in: query
+        description: Latitude of the search center point
+        required: false
+        schema:
+          type: number
+          format: float
+          example: 41.8827
+      - name: longitude
+        in: query
+        description: Longitude of the search center point
+        required: false
+        schema:
+          type: number
+          format: float
+          example: -87.6233
+      - name: address
+        in: query
+        description: Street address or point of interest name to search near
+        required: false
+        schema:
+          type: string
+          example: 233 S Wacker Dr, Chicago, IL 60606
+      - name: starts
+        in: query
+        description: Parking start time in ISO 8601 format
+        required: true
+        schema:
+          type: string
+          format: date-time
+          example: '2026-06-01T09:00:00Z'
+      - name: ends
+        in: query
+        description: Parking end time in ISO 8601 format
+        required: true
+        schema:
+          type: string
+          format: date-time
+          example: '2026-06-01T17:00:00Z'
+      - name: radius
+        in: query
+        description: Search radius in miles (default 0.5)
+        required: false
+        schema:
+          type: number
+          format: float
+          default: 0.5
+          example: 1.0
+      - name: vehicle_type
+        in: query
+        description: Type of vehicle
+        required: false
+        schema:
+          type: string
+          enum:
+          - car
+          - motorcycle
+          - oversized
+          - monthly
+          default: car
+      - name: limit
+        in: query
+        description: Maximum number of results to return
+        required: false
+        schema:
+          type: integer
+          default: 20
+          maximum: 100
+      - name: sort
+        in: query
+        description: Sort order for results
+        required: false
+        schema:
+          type: string
+          enum:
+          - distance
+          - price
+          - rating
+          default: distance
+      responses:
+        '200':
+          description: Successful search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - missing or invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    SearchResult:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+          example: fac_abc123
+        name:
+          type: string
+          description: Facility name
+          example: Millennium Park Garage
+        address:
+          $ref: '#/components/schemas/Address'
+        distance_miles:
+          type: number
+          format: float
+          description: Distance from search center in miles
+          example: 0.3
+        price:
+          $ref: '#/components/schemas/Price'
+        availability:
+          $ref: '#/components/schemas/AvailabilitySummary'
+        amenities:
+          type: array
+          items:
+            type: string
+          description: List of facility amenities
+          example:
+          - covered
+          - handicap_accessible
+          - ev_charging
+        rating:
+          type: number
+          format: float
+          description: Average customer rating (0-5)
+          example: 4.2
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 233 S Wacker Dr
+        city:
+          type: string
+          example: Chicago
+        state:
+          type: string
+          example: IL
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: US
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total:
+          type: integer
+          description: Total number of facilities matching the search criteria
+        offset:
+          type: integer
+          description: Current offset for pagination
+        limit:
+          type: integer
+          description: Maximum results per page
+    AvailabilitySummary:
+      type: object
+      properties:
+        available:
+          type: boolean
+          description: Whether parking is available
+        spaces_available:
+          type: integer
+          description: Approximate number of open spaces
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Partner API key issued by SpotHero
+externalDocs:
+  description: SpotHero Developer Documentation
+  url: https://api.spothero.com/v2/docs

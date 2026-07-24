@@ -1,0 +1,213 @@
+openapi: 3.0.3
+info:
+  title: SpotHero Parking Availability Facilities API
+  description: The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.
+  version: 2.0.0
+  termsOfService: https://spothero.com/terms
+  contact:
+    name: SpotHero Partner Support
+    email: partner.support@spothero.com
+    url: https://spothero.com/developers
+  license:
+    name: Proprietary
+    url: https://spothero.com/terms
+servers:
+- url: https://api.spothero.com/v2
+  description: SpotHero API v2 Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Facilities
+  description: Retrieve facility details, amenities, pricing, and directions
+paths:
+  /facilities/{facility_id}:
+    get:
+      operationId: get-facility
+      tags:
+      - Facilities
+      summary: Get Facility
+      description: Retrieve detailed information about a specific parking facility including address, amenities, operating hours, pricing, and directions.
+      parameters:
+      - name: facility_id
+        in: path
+        description: Unique identifier for the parking facility
+        required: true
+        schema:
+          type: string
+          example: fac_abc123
+      responses:
+        '200':
+          description: Facility details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  schemas:
+    DayHours:
+      type: object
+      properties:
+        open:
+          type: string
+          description: Opening time in HH:MM format
+          example: 06:00
+        close:
+          type: string
+          description: Closing time in HH:MM format
+          example: '22:00'
+        closed:
+          type: boolean
+          description: Whether the facility is closed this day
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 233 S Wacker Dr
+        city:
+          type: string
+          example: Chicago
+        state:
+          type: string
+          example: IL
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: US
+    OperatingHours:
+      type: object
+      description: Operating hours for each day of the week
+      properties:
+        monday:
+          $ref: '#/components/schemas/DayHours'
+        tuesday:
+          $ref: '#/components/schemas/DayHours'
+        wednesday:
+          $ref: '#/components/schemas/DayHours'
+        thursday:
+          $ref: '#/components/schemas/DayHours'
+        friday:
+          $ref: '#/components/schemas/DayHours'
+        saturday:
+          $ref: '#/components/schemas/DayHours'
+        sunday:
+          $ref: '#/components/schemas/DayHours'
+        is_24_hours:
+          type: boolean
+          description: Whether the facility operates 24 hours a day
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 41.8827
+        longitude:
+          type: number
+          format: float
+          example: -87.6233
+    Facility:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+          example: fac_abc123
+        name:
+          type: string
+          description: Facility name
+          example: Millennium Park Garage
+        description:
+          type: string
+          description: Facility description and access instructions
+        address:
+          $ref: '#/components/schemas/Address'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        phone:
+          type: string
+          description: Facility phone number
+          example: '+13125551234'
+        hours:
+          $ref: '#/components/schemas/OperatingHours'
+        amenities:
+          type: array
+          items:
+            type: string
+          description: List of available amenities
+        capacity:
+          type: integer
+          description: Total parking capacity
+          example: 500
+        entry_instructions:
+          type: string
+          description: Instructions for entering the facility
+        exit_instructions:
+          type: string
+          description: Instructions for exiting the facility
+        rating:
+          type: number
+          format: float
+          description: Average customer rating (0-5)
+        review_count:
+          type: integer
+          description: Number of customer reviews
+        operator:
+          type: string
+          description: Parking operator name
+        facility_type:
+          type: string
+          enum:
+          - garage
+          - lot
+          - street
+          - valet
+          description: Type of parking facility
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Partner API key issued by SpotHero
+externalDocs:
+  description: SpotHero Developer Documentation
+  url: https://api.spothero.com/v2/docs

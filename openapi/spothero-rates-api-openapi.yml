@@ -1,0 +1,165 @@
+openapi: 3.0.3
+info:
+  title: SpotHero Parking Availability Rates API
+  description: The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.
+  version: 2.0.0
+  termsOfService: https://spothero.com/terms
+  contact:
+    name: SpotHero Partner Support
+    email: partner.support@spothero.com
+    url: https://spothero.com/developers
+  license:
+    name: Proprietary
+    url: https://spothero.com/terms
+servers:
+- url: https://api.spothero.com/v2
+  description: SpotHero API v2 Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Rates
+  description: Retrieve pricing and rate information
+paths:
+  /facilities/{facility_id}/rates:
+    get:
+      operationId: get-facility-rates
+      tags:
+      - Rates
+      summary: Get Facility Rates
+      description: Retrieve pricing rates for a specific parking facility. Returns hourly, daily, monthly, and event rates where available.
+      parameters:
+      - name: facility_id
+        in: path
+        description: Unique identifier for the parking facility
+        required: true
+        schema:
+          type: string
+          example: fac_abc123
+      - name: starts
+        in: query
+        description: Start time for rate calculation in ISO 8601 format
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: ends
+        in: query
+        description: End time for rate calculation in ISO 8601 format
+        required: false
+        schema:
+          type: string
+          format: date-time
+      responses:
+        '200':
+          description: Rate information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+components:
+  responses:
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Rate:
+      type: object
+      properties:
+        rate_id:
+          type: string
+          description: Unique rate identifier
+        name:
+          type: string
+          description: Rate name/description
+          example: Early Bird Rate
+        type:
+          type: string
+          enum:
+          - hourly
+          - daily
+          - monthly
+          - event
+          - overnight
+          description: Rate type
+        price:
+          $ref: '#/components/schemas/Price'
+        starts:
+          type: string
+          format: date-time
+          description: Rate validity start time
+        ends:
+          type: string
+          format: date-time
+          description: Rate validity end time
+        vehicle_types:
+          type: array
+          items:
+            type: string
+          description: Vehicle types this rate applies to
+    RateList:
+      type: object
+      properties:
+        facility_id:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Partner API key issued by SpotHero
+externalDocs:
+  description: SpotHero Developer Documentation
+  url: https://api.spothero.com/v2/docs
