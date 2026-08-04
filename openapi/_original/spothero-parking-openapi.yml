@@ -1,0 +1,884 @@
+openapi: 3.0.3
+info:
+  title: SpotHero Parking API
+  description: >-
+    The SpotHero Parking API provides programmatic access to the largest network of off-street
+    parking facilities in North America. Partners can search for available parking spots,
+    check real-time availability, create and manage reservations, and access facility details
+    including pricing, amenities, and directions. The API supports navigation apps, mobility
+    platforms, connected car dashboards, event ticketing systems, and enterprise fleet
+    management solutions.
+  version: '2.0.0'
+  termsOfService: https://spothero.com/terms
+  contact:
+    name: SpotHero Partner Support
+    email: partner.support@spothero.com
+    url: https://spothero.com/developers
+  license:
+    name: Proprietary
+    url: https://spothero.com/terms
+externalDocs:
+  description: SpotHero Developer Documentation
+  url: https://api.spothero.com/v2/docs
+servers:
+  - url: https://api.spothero.com/v2
+    description: SpotHero API v2 Production
+tags:
+  - name: Search
+    description: Search for available parking locations and facilities
+  - name: Facilities
+    description: Retrieve facility details, amenities, pricing, and directions
+  - name: Availability
+    description: Check real-time parking availability
+  - name: Reservations
+    description: Create, manage, and cancel parking reservations
+  - name: Rates
+    description: Retrieve pricing and rate information
+security:
+  - ApiKeyAuth: []
+paths:
+  /search:
+    get:
+      operationId: search-parking
+      tags:
+        - Search
+      summary: Search Parking Locations
+      description: >-
+        Search for available parking locations near a given address, coordinates, or point of
+        interest. Returns a list of facilities with availability and pricing for the requested
+        time period.
+      parameters:
+        - name: latitude
+          in: query
+          description: Latitude of the search center point
+          required: false
+          schema:
+            type: number
+            format: float
+            example: 41.8827
+        - name: longitude
+          in: query
+          description: Longitude of the search center point
+          required: false
+          schema:
+            type: number
+            format: float
+            example: -87.6233
+        - name: address
+          in: query
+          description: Street address or point of interest name to search near
+          required: false
+          schema:
+            type: string
+            example: '233 S Wacker Dr, Chicago, IL 60606'
+        - name: starts
+          in: query
+          description: Parking start time in ISO 8601 format
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-06-01T09:00:00Z'
+        - name: ends
+          in: query
+          description: Parking end time in ISO 8601 format
+          required: true
+          schema:
+            type: string
+            format: date-time
+            example: '2026-06-01T17:00:00Z'
+        - name: radius
+          in: query
+          description: Search radius in miles (default 0.5)
+          required: false
+          schema:
+            type: number
+            format: float
+            default: 0.5
+            example: 1.0
+        - name: vehicle_type
+          in: query
+          description: Type of vehicle
+          required: false
+          schema:
+            type: string
+            enum: [car, motorcycle, oversized, monthly]
+            default: car
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: sort
+          in: query
+          description: Sort order for results
+          required: false
+          schema:
+            type: string
+            enum: [distance, price, rating]
+            default: distance
+      responses:
+        '200':
+          description: Successful search results
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResults'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /facilities/{facility_id}:
+    get:
+      operationId: get-facility
+      tags:
+        - Facilities
+      summary: Get Facility
+      description: >-
+        Retrieve detailed information about a specific parking facility including address,
+        amenities, operating hours, pricing, and directions.
+      parameters:
+        - name: facility_id
+          in: path
+          description: Unique identifier for the parking facility
+          required: true
+          schema:
+            type: string
+            example: 'fac_abc123'
+      responses:
+        '200':
+          description: Facility details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Facility'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /facilities/{facility_id}/availability:
+    get:
+      operationId: get-facility-availability
+      tags:
+        - Availability
+      summary: Get Facility Availability
+      description: >-
+        Check real-time availability for a specific parking facility during a given time period.
+        Returns current capacity, available spaces, and pricing for the requested window.
+      parameters:
+        - name: facility_id
+          in: path
+          description: Unique identifier for the parking facility
+          required: true
+          schema:
+            type: string
+            example: 'fac_abc123'
+        - name: starts
+          in: query
+          description: Start time for availability check in ISO 8601 format
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: ends
+          in: query
+          description: End time for availability check in ISO 8601 format
+          required: true
+          schema:
+            type: string
+            format: date-time
+        - name: vehicle_type
+          in: query
+          description: Type of vehicle
+          required: false
+          schema:
+            type: string
+            enum: [car, motorcycle, oversized, monthly]
+            default: car
+      responses:
+        '200':
+          description: Availability information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Availability'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /facilities/{facility_id}/rates:
+    get:
+      operationId: get-facility-rates
+      tags:
+        - Rates
+      summary: Get Facility Rates
+      description: >-
+        Retrieve pricing rates for a specific parking facility. Returns hourly, daily,
+        monthly, and event rates where available.
+      parameters:
+        - name: facility_id
+          in: path
+          description: Unique identifier for the parking facility
+          required: true
+          schema:
+            type: string
+            example: 'fac_abc123'
+        - name: starts
+          in: query
+          description: Start time for rate calculation in ISO 8601 format
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: ends
+          in: query
+          description: End time for rate calculation in ISO 8601 format
+          required: false
+          schema:
+            type: string
+            format: date-time
+      responses:
+        '200':
+          description: Rate information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RateList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /reservations:
+    get:
+      operationId: list-reservations
+      tags:
+        - Reservations
+      summary: List Reservations
+      description: >-
+        Retrieve a list of parking reservations for the authenticated partner account.
+        Supports filtering by status, date range, and facility.
+      parameters:
+        - name: status
+          in: query
+          description: Filter by reservation status
+          required: false
+          schema:
+            type: string
+            enum: [active, completed, cancelled, upcoming]
+        - name: starts_after
+          in: query
+          description: Filter reservations starting after this date
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: starts_before
+          in: query
+          description: Filter reservations starting before this date
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: facility_id
+          in: query
+          description: Filter by facility ID
+          required: false
+          schema:
+            type: string
+        - name: limit
+          in: query
+          description: Maximum number of results to return
+          required: false
+          schema:
+            type: integer
+            default: 20
+            maximum: 100
+        - name: offset
+          in: query
+          description: Number of results to skip for pagination
+          required: false
+          schema:
+            type: integer
+            default: 0
+      responses:
+        '200':
+          description: List of reservations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ReservationList'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    post:
+      operationId: create-reservation
+      tags:
+        - Reservations
+      summary: Create Reservation
+      description: >-
+        Create a new parking reservation at a specific facility for a given time period.
+        Returns a confirmation with a booking reference and barcode for facility entry.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReservationRequest'
+      responses:
+        '201':
+          description: Reservation created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '409':
+          description: Conflict - facility no longer available for requested time period
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /reservations/{reservation_id}:
+    get:
+      operationId: get-reservation
+      tags:
+        - Reservations
+      summary: Get Reservation
+      description: Retrieve details for a specific parking reservation by its ID.
+      parameters:
+        - name: reservation_id
+          in: path
+          description: Unique identifier for the reservation
+          required: true
+          schema:
+            type: string
+            example: 'res_xyz789'
+      responses:
+        '200':
+          description: Reservation details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+    delete:
+      operationId: cancel-reservation
+      tags:
+        - Reservations
+      summary: Cancel Reservation
+      description: >-
+        Cancel an existing parking reservation. Cancellation policies and refund eligibility
+        depend on the facility's terms and the time of cancellation relative to the reservation start.
+      parameters:
+        - name: reservation_id
+          in: path
+          description: Unique identifier for the reservation
+          required: true
+          schema:
+            type: string
+            example: 'res_xyz789'
+      responses:
+        '200':
+          description: Reservation cancelled successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Reservation'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          description: Conflict - reservation cannot be cancelled (already completed or non-refundable)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: Partner API key issued by SpotHero
+
+  schemas:
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total:
+          type: integer
+          description: Total number of facilities matching the search criteria
+        offset:
+          type: integer
+          description: Current offset for pagination
+        limit:
+          type: integer
+          description: Maximum results per page
+
+    SearchResult:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+          example: 'fac_abc123'
+        name:
+          type: string
+          description: Facility name
+          example: 'Millennium Park Garage'
+        address:
+          $ref: '#/components/schemas/Address'
+        distance_miles:
+          type: number
+          format: float
+          description: Distance from search center in miles
+          example: 0.3
+        price:
+          $ref: '#/components/schemas/Price'
+        availability:
+          $ref: '#/components/schemas/AvailabilitySummary'
+        amenities:
+          type: array
+          items:
+            type: string
+          description: List of facility amenities
+          example: ['covered', 'handicap_accessible', 'ev_charging']
+        rating:
+          type: number
+          format: float
+          description: Average customer rating (0-5)
+          example: 4.2
+
+    Facility:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+          example: 'fac_abc123'
+        name:
+          type: string
+          description: Facility name
+          example: 'Millennium Park Garage'
+        description:
+          type: string
+          description: Facility description and access instructions
+        address:
+          $ref: '#/components/schemas/Address'
+        coordinates:
+          $ref: '#/components/schemas/Coordinates'
+        phone:
+          type: string
+          description: Facility phone number
+          example: '+13125551234'
+        hours:
+          $ref: '#/components/schemas/OperatingHours'
+        amenities:
+          type: array
+          items:
+            type: string
+          description: List of available amenities
+        capacity:
+          type: integer
+          description: Total parking capacity
+          example: 500
+        entry_instructions:
+          type: string
+          description: Instructions for entering the facility
+        exit_instructions:
+          type: string
+          description: Instructions for exiting the facility
+        rating:
+          type: number
+          format: float
+          description: Average customer rating (0-5)
+        review_count:
+          type: integer
+          description: Number of customer reviews
+        operator:
+          type: string
+          description: Parking operator name
+        facility_type:
+          type: string
+          enum: [garage, lot, street, valet]
+          description: Type of parking facility
+
+    Availability:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+        available:
+          type: boolean
+          description: Whether parking is available for the requested time period
+        spaces_available:
+          type: integer
+          description: Estimated number of available spaces
+        price:
+          $ref: '#/components/schemas/Price'
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+
+    AvailabilitySummary:
+      type: object
+      properties:
+        available:
+          type: boolean
+          description: Whether parking is available
+        spaces_available:
+          type: integer
+          description: Approximate number of open spaces
+
+    RateList:
+      type: object
+      properties:
+        facility_id:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
+
+    Rate:
+      type: object
+      properties:
+        rate_id:
+          type: string
+          description: Unique rate identifier
+        name:
+          type: string
+          description: Rate name/description
+          example: 'Early Bird Rate'
+        type:
+          type: string
+          enum: [hourly, daily, monthly, event, overnight]
+          description: Rate type
+        price:
+          $ref: '#/components/schemas/Price'
+        starts:
+          type: string
+          format: date-time
+          description: Rate validity start time
+        ends:
+          type: string
+          format: date-time
+          description: Rate validity end time
+        vehicle_types:
+          type: array
+          items:
+            type: string
+          description: Vehicle types this rate applies to
+
+    ReservationRequest:
+      type: object
+      required:
+        - facility_id
+        - rate_id
+        - starts
+        - ends
+        - driver
+        - vehicle
+      properties:
+        facility_id:
+          type: string
+          description: Unique identifier for the parking facility
+          example: 'fac_abc123'
+        rate_id:
+          type: string
+          description: Unique identifier for the selected rate
+          example: 'rate_early_bird'
+        starts:
+          type: string
+          format: date-time
+          description: Reservation start time in ISO 8601 format
+        ends:
+          type: string
+          format: date-time
+          description: Reservation end time in ISO 8601 format
+        driver:
+          $ref: '#/components/schemas/Driver'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        partner_reference:
+          type: string
+          description: Optional partner-side reference identifier for tracking
+          example: 'order_99887766'
+
+    Reservation:
+      type: object
+      properties:
+        reservation_id:
+          type: string
+          description: Unique SpotHero reservation identifier
+          example: 'res_xyz789'
+        status:
+          type: string
+          enum: [active, completed, cancelled, upcoming]
+          description: Current reservation status
+        facility_id:
+          type: string
+          description: Parking facility identifier
+        facility_name:
+          type: string
+          description: Name of the parking facility
+        starts:
+          type: string
+          format: date-time
+          description: Reservation start time
+        ends:
+          type: string
+          format: date-time
+          description: Reservation end time
+        price:
+          $ref: '#/components/schemas/Price'
+        driver:
+          $ref: '#/components/schemas/Driver'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        barcode:
+          type: string
+          description: Barcode value for facility access
+        barcode_format:
+          type: string
+          description: Barcode format (e.g., QR, Code128)
+          example: 'QR'
+        confirmation_code:
+          type: string
+          description: Human-readable confirmation code
+          example: 'SH-ABC123'
+        partner_reference:
+          type: string
+          description: Partner-side reference identifier
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when reservation was created
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when reservation was last updated
+
+    ReservationList:
+      type: object
+      properties:
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+
+    Driver:
+      type: object
+      required:
+        - first_name
+        - last_name
+        - email
+      properties:
+        first_name:
+          type: string
+          example: 'Jane'
+        last_name:
+          type: string
+          example: 'Smith'
+        email:
+          type: string
+          format: email
+          example: 'jane.smith@example.com'
+        phone:
+          type: string
+          example: '+13125551234'
+
+    Vehicle:
+      type: object
+      properties:
+        type:
+          type: string
+          enum: [car, motorcycle, oversized]
+          default: car
+        license_plate:
+          type: string
+          description: Vehicle license plate number
+          example: 'ABC1234'
+        state:
+          type: string
+          description: US state or Canadian province abbreviation
+          example: 'IL'
+        make:
+          type: string
+          description: Vehicle manufacturer
+          example: 'Toyota'
+        model:
+          type: string
+          description: Vehicle model
+          example: 'Camry'
+        color:
+          type: string
+          description: Vehicle color
+          example: 'Blue'
+
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.00
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: 'USD'
+        display:
+          type: string
+          description: Human-readable price string
+          example: '$15.00'
+
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: '233 S Wacker Dr'
+        city:
+          type: string
+          example: 'Chicago'
+        state:
+          type: string
+          example: 'IL'
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: 'US'
+
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 41.8827
+        longitude:
+          type: number
+          format: float
+          example: -87.6233
+
+    OperatingHours:
+      type: object
+      description: Operating hours for each day of the week
+      properties:
+        monday:
+          $ref: '#/components/schemas/DayHours'
+        tuesday:
+          $ref: '#/components/schemas/DayHours'
+        wednesday:
+          $ref: '#/components/schemas/DayHours'
+        thursday:
+          $ref: '#/components/schemas/DayHours'
+        friday:
+          $ref: '#/components/schemas/DayHours'
+        saturday:
+          $ref: '#/components/schemas/DayHours'
+        sunday:
+          $ref: '#/components/schemas/DayHours'
+        is_24_hours:
+          type: boolean
+          description: Whether the facility operates 24 hours a day
+
+    DayHours:
+      type: object
+      properties:
+        open:
+          type: string
+          description: Opening time in HH:MM format
+          example: '06:00'
+        close:
+          type: string
+          description: Closing time in HH:MM format
+          example: '22:00'
+        closed:
+          type: boolean
+          description: Whether the facility is closed this day
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+
+  responses:
+    BadRequest:
+      description: Bad request - missing or invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'

@@ -1,0 +1,22 @@
+{
+  "provider": "spothero",
+  "sources": [
+    "spothero-availability-api-openapi.yml",
+    "spothero-facilities-api-openapi.yml",
+    "spothero-rates-api-openapi.yml",
+    "spothero-reservations-api-openapi.yml",
+    "spothero-search-api-openapi.yml"
+  ],
+  "outputs": [
+    "spothero-availability-api-openapi.yml",
+    "spothero-facilities-api-openapi.yml",
+    "spothero-rates-api-openapi.yml",
+    "spothero-reservations-api-openapi.yml",
+    "spothero-search-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

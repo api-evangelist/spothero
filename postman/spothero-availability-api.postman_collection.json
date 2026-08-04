@@ -1,0 +1,389 @@
+{
+  "info": {
+    "_postman_id": "d78aee64-3c05-44d7-a04c-deaf1079d64f",
+    "name": "SpotHero Parking Availability API",
+    "description": "The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.\n\nContact Support:\n Name: SpotHero Partner Support\n Email: partner.support@spothero.com",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "createdAt": "2026-07-28T03:00:54.000Z",
+    "updatedAt": "2026-07-28T03:00:54.000Z",
+    "lastUpdatedBy": "35240",
+    "uid": "35240-d78aee64-3c05-44d7-a04c-deaf1079d64f"
+  },
+  "item": [
+    {
+      "name": "facilities",
+      "item": [
+        {
+          "name": "{facility_id}",
+          "item": [
+            {
+              "name": "availability",
+              "item": [
+                {
+                  "name": "Get Facility Availability",
+                  "id": "80f86022-d574-4998-9115-24cf8dc18df6",
+                  "protocolProfileBehavior": {
+                    "disableBodyPruning": true
+                  },
+                  "request": {
+                    "method": "GET",
+                    "header": [
+                      {
+                        "key": "Accept",
+                        "value": "application/json"
+                      }
+                    ],
+                    "url": {
+                      "raw": "{{baseUrl}}/facilities/:facility_id/availability?starts=<dateTime>&ends=<dateTime>&vehicle_type=car",
+                      "host": [
+                        "{{baseUrl}}"
+                      ],
+                      "path": [
+                        "facilities",
+                        ":facility_id",
+                        "availability"
+                      ],
+                      "query": [
+                        {
+                          "description": "(Required) Start time for availability check in ISO 8601 format",
+                          "key": "starts",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "(Required) End time for availability check in ISO 8601 format",
+                          "key": "ends",
+                          "value": "<dateTime>"
+                        },
+                        {
+                          "description": "Type of vehicle",
+                          "key": "vehicle_type",
+                          "value": "car"
+                        }
+                      ],
+                      "variable": [
+                        {
+                          "id": "0ec769ba-8156-490b-8041-6d9af40d9a68",
+                          "key": "facility_id",
+                          "value": "<string>",
+                          "description": "(Required) Unique identifier for the parking facility"
+                        }
+                      ]
+                    },
+                    "description": "Check real-time availability for a specific parking facility during a given time period. Returns current capacity, available spaces, and pricing for the requested window."
+                  },
+                  "response": [
+                    {
+                      "id": "fe1218c4-7f3d-4ec3-8ba8-dad4988d1c5e",
+                      "name": "Availability information",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/facilities/:facility_id/availability?starts=<dateTime>&ends=<dateTime>&vehicle_type=car",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "facilities",
+                            ":facility_id",
+                            "availability"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Start time for availability check in ISO 8601 format",
+                              "key": "starts",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "(Required) End time for availability check in ISO 8601 format",
+                              "key": "ends",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Type of vehicle",
+                              "key": "vehicle_type",
+                              "value": "car"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "facility_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "OK",
+                      "code": 200,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"facility_id\": \"<string>\",\n  \"available\": \"<boolean>\",\n  \"spaces_available\": \"<integer>\",\n  \"price\": {\n    \"amount\": \"<float>\",\n    \"currency\": \"<string>\",\n    \"display\": \"<string>\"\n  },\n  \"rates\": [\n    {\n      \"rate_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"type\": \"daily\",\n      \"price\": {\n        \"amount\": \"<float>\",\n        \"currency\": \"<string>\",\n        \"display\": \"<string>\"\n      },\n      \"starts\": \"<dateTime>\",\n      \"ends\": \"<dateTime>\",\n      \"vehicle_types\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    },\n    {\n      \"rate_id\": \"<string>\",\n      \"name\": \"<string>\",\n      \"type\": \"monthly\",\n      \"price\": {\n        \"amount\": \"<float>\",\n        \"currency\": \"<string>\",\n        \"display\": \"<string>\"\n      },\n      \"starts\": \"<dateTime>\",\n      \"ends\": \"<dateTime>\",\n      \"vehicle_types\": [\n        \"<string>\",\n        \"<string>\"\n      ]\n    }\n  ]\n}",
+                      "createdAt": "2026-07-28T03:00:54.000Z",
+                      "updatedAt": "2026-07-28T03:00:54.000Z",
+                      "uid": "35240-fe1218c4-7f3d-4ec3-8ba8-dad4988d1c5e"
+                    },
+                    {
+                      "id": "8964c843-04f1-48c7-85bd-71dbc803b83e",
+                      "name": "Unauthorized - invalid or missing API key",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/facilities/:facility_id/availability?starts=<dateTime>&ends=<dateTime>&vehicle_type=car",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "facilities",
+                            ":facility_id",
+                            "availability"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Start time for availability check in ISO 8601 format",
+                              "key": "starts",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "(Required) End time for availability check in ISO 8601 format",
+                              "key": "ends",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Type of vehicle",
+                              "key": "vehicle_type",
+                              "value": "car"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "facility_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Unauthorized",
+                      "code": 401,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\",\n  \"details\": {}\n}",
+                      "createdAt": "2026-07-28T03:00:54.000Z",
+                      "updatedAt": "2026-07-28T03:00:54.000Z",
+                      "uid": "35240-8964c843-04f1-48c7-85bd-71dbc803b83e"
+                    },
+                    {
+                      "id": "44c80ea8-83e9-4f61-948c-302885628130",
+                      "name": "Resource not found",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/facilities/:facility_id/availability?starts=<dateTime>&ends=<dateTime>&vehicle_type=car",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "facilities",
+                            ":facility_id",
+                            "availability"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Start time for availability check in ISO 8601 format",
+                              "key": "starts",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "(Required) End time for availability check in ISO 8601 format",
+                              "key": "ends",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Type of vehicle",
+                              "key": "vehicle_type",
+                              "value": "car"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "facility_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Not Found",
+                      "code": 404,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\",\n  \"details\": {}\n}",
+                      "createdAt": "2026-07-28T03:00:54.000Z",
+                      "updatedAt": "2026-07-28T03:00:54.000Z",
+                      "uid": "35240-44c80ea8-83e9-4f61-948c-302885628130"
+                    },
+                    {
+                      "id": "132f92ee-c59f-47fa-baca-24f5bfaa3692",
+                      "name": "Rate limit exceeded",
+                      "originalRequest": {
+                        "method": "GET",
+                        "header": [
+                          {
+                            "key": "Accept",
+                            "value": "application/json"
+                          },
+                          {
+                            "description": "Added as a part of security scheme: apikey",
+                            "key": "X-API-Key",
+                            "value": "<API Key>"
+                          }
+                        ],
+                        "url": {
+                          "raw": "{{baseUrl}}/facilities/:facility_id/availability?starts=<dateTime>&ends=<dateTime>&vehicle_type=car",
+                          "host": [
+                            "{{baseUrl}}"
+                          ],
+                          "path": [
+                            "facilities",
+                            ":facility_id",
+                            "availability"
+                          ],
+                          "query": [
+                            {
+                              "description": "(Required) Start time for availability check in ISO 8601 format",
+                              "key": "starts",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "(Required) End time for availability check in ISO 8601 format",
+                              "key": "ends",
+                              "value": "<dateTime>"
+                            },
+                            {
+                              "description": "Type of vehicle",
+                              "key": "vehicle_type",
+                              "value": "car"
+                            }
+                          ],
+                          "variable": [
+                            {
+                              "key": "facility_id"
+                            }
+                          ]
+                        }
+                      },
+                      "status": "Too Many Requests",
+                      "code": 429,
+                      "_postman_previewlanguage": "json",
+                      "header": [
+                        {
+                          "key": "Content-Type",
+                          "value": "application/json"
+                        }
+                      ],
+                      "cookie": [],
+                      "responseTime": null,
+                      "body": "{\n  \"code\": \"<string>\",\n  \"message\": \"<string>\",\n  \"details\": {}\n}",
+                      "createdAt": "2026-07-28T03:00:54.000Z",
+                      "updatedAt": "2026-07-28T03:00:54.000Z",
+                      "uid": "35240-132f92ee-c59f-47fa-baca-24f5bfaa3692"
+                    }
+                  ],
+                  "createdAt": "2026-07-28T03:00:54.000Z",
+                  "updatedAt": "2026-07-28T03:00:54.000Z",
+                  "uid": "35240-80f86022-d574-4998-9115-24cf8dc18df6"
+                }
+              ],
+              "id": "d79893fc-fcaf-4b98-8447-e9e0dc3efeb7",
+              "createdAt": "2026-07-28T03:00:54.000Z",
+              "updatedAt": "2026-07-28T03:00:54.000Z",
+              "uid": "35240-d79893fc-fcaf-4b98-8447-e9e0dc3efeb7"
+            }
+          ],
+          "id": "6348df58-b73c-44cb-98eb-d5c9d600f4fc",
+          "createdAt": "2026-07-28T03:00:54.000Z",
+          "updatedAt": "2026-07-28T03:00:54.000Z",
+          "uid": "35240-6348df58-b73c-44cb-98eb-d5c9d600f4fc"
+        }
+      ],
+      "id": "19c5fe80-eb98-4968-9890-202598e0de95",
+      "createdAt": "2026-07-28T03:00:54.000Z",
+      "updatedAt": "2026-07-28T03:00:54.000Z",
+      "uid": "35240-19c5fe80-eb98-4968-9890-202598e0de95"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key",
+        "type": "string"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}",
+        "type": "string"
+      },
+      {
+        "key": "in",
+        "value": "header",
+        "type": "string"
+      }
+    ]
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://api.spothero.com/v2"
+    }
+  ]
+}
