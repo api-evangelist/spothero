@@ -164,8 +164,6 @@ common:
     url: json-ld/spothero-context.jsonld
   - type: SpectralRules
     url: rules/spothero-rules.yml
-  - type: Capabilities
-    url: capabilities/parking-mobility.yaml
   - type: Vocabulary
     url: vocabulary/spothero-vocabulary.yml
   - url: https://blog.spothero.com/feed/
