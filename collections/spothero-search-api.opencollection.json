@@ -1,0 +1,93 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "SpotHero Parking Availability Search API",
+    "version": "2.0.0"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "X-API-Key",
+      "value": "{{X-API-Key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search Parking Locations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.spothero.com/v2/search",
+            "params": [
+              {
+                "name": "latitude",
+                "value": "",
+                "type": "query",
+                "description": "Latitude of the search center point"
+              },
+              {
+                "name": "longitude",
+                "value": "",
+                "type": "query",
+                "description": "Longitude of the search center point"
+              },
+              {
+                "name": "address",
+                "value": "",
+                "type": "query",
+                "description": "Street address or point of interest name to search near"
+              },
+              {
+                "name": "starts",
+                "value": "",
+                "type": "query",
+                "description": "Parking start time in ISO 8601 format"
+              },
+              {
+                "name": "ends",
+                "value": "",
+                "type": "query",
+                "description": "Parking end time in ISO 8601 format"
+              },
+              {
+                "name": "radius",
+                "value": "",
+                "type": "query",
+                "description": "Search radius in miles (default 0.5)"
+              },
+              {
+                "name": "vehicle_type",
+                "value": "",
+                "type": "query",
+                "description": "Type of vehicle"
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return"
+              },
+              {
+                "name": "sort",
+                "value": "",
+                "type": "query",
+                "description": "Sort order for results"
+              }
+            ]
+          },
+          "docs": "Search for available parking locations near a given address, coordinates, or point of interest. Returns a list of facilities with availability and pricing for the requested time period."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

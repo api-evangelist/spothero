@@ -1,0 +1,301 @@
+{
+  "item": [
+    {
+      "id": "d0017c8f-4c26-4ecd-9d75-3c36d21590fa",
+      "name": "Facilities",
+      "description": {
+        "content": "Retrieve facility details, amenities, pricing, and directions",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7485f103-a0b0-4541-9076-30e927468ac8",
+          "name": "Get Facility",
+          "request": {
+            "name": "Get Facility",
+            "description": {
+              "content": "Retrieve detailed information about a specific parking facility including address, amenities, operating hours, pricing, and directions.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "facilities",
+                ":facility_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "facility_id",
+                  "description": "(Required) Unique identifier for the parking facility"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "de3b3851-042c-435f-8d3d-5985c9f574fe",
+              "name": "Facility details",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"facility_id\": \"fac_abc123\",\n  \"name\": \"Millennium Park Garage\",\n  \"description\": \"string\",\n  \"address\": {\n    \"street\": \"233 S Wacker Dr\",\n    \"city\": \"Chicago\",\n    \"state\": \"IL\",\n    \"zip\": \"60606\",\n    \"country\": \"US\"\n  },\n  \"coordinates\": {\n    \"latitude\": 41.8827,\n    \"longitude\": -87.6233\n  },\n  \"phone\": \"+13125551234\",\n  \"hours\": {\n    \"monday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": true\n    },\n    \"tuesday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": true\n    },\n    \"wednesday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": true\n    },\n    \"thursday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": false\n    },\n    \"friday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": false\n    },\n    \"saturday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": true\n    },\n    \"sunday\": {\n      \"open\": \"06:00\",\n      \"close\": \"22:00\",\n      \"closed\": true\n    },\n    \"is_24_hours\": false\n  },\n  \"amenities\": [\n    \"string\",\n    \"string\"\n  ],\n  \"capacity\": 500,\n  \"entry_instructions\": \"string\",\n  \"exit_instructions\": \"string\",\n  \"rating\": 1925.2736787991098,\n  \"review_count\": 8558,\n  \"operator\": \"string\",\n  \"facility_type\": \"valet\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d742d014-167c-4941-8575-1d1d26bde45e",
+              "name": "Unauthorized - invalid or missing API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2d586f80-9d2b-4c54-b397-464a771364f9",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3a76e8cf-7c01-45b0-9066-5fa1f3e1abfb",
+              "name": "Rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.spothero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "3384d1a7-4e98-450c-ac64-0c508c4d5f50",
+    "name": "SpotHero Parking Availability Facilities API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.\n\nContact Support:\n Name: SpotHero Partner Support\n Email: partner.support@spothero.com",
+      "type": "text/plain"
+    }
+  }
+}

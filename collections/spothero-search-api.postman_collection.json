@@ -1,0 +1,459 @@
+{
+  "item": [
+    {
+      "id": "b97aea5c-6fe3-4b7b-aec7-c1cc18173083",
+      "name": "Search",
+      "description": {
+        "content": "Search for available parking locations and facilities",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "7187426a-8f0d-4f98-8561-ea6735a38ab7",
+          "name": "Search Parking Locations",
+          "request": {
+            "name": "Search Parking Locations",
+            "description": {
+              "content": "Search for available parking locations near a given address, coordinates, or point of interest. Returns a list of facilities with availability and pricing for the requested time period.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "search"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "latitude",
+                  "value": "<float>",
+                  "description": "Latitude of the search center point"
+                },
+                {
+                  "disabled": false,
+                  "key": "longitude",
+                  "value": "<float>",
+                  "description": "Longitude of the search center point"
+                },
+                {
+                  "disabled": false,
+                  "key": "address",
+                  "value": "<string>",
+                  "description": "Street address or point of interest name to search near"
+                },
+                {
+                  "disabled": false,
+                  "key": "starts",
+                  "value": "<dateTime>",
+                  "description": "(Required) Parking start time in ISO 8601 format"
+                },
+                {
+                  "disabled": false,
+                  "key": "ends",
+                  "value": "<dateTime>",
+                  "description": "(Required) Parking end time in ISO 8601 format"
+                },
+                {
+                  "disabled": false,
+                  "key": "radius",
+                  "value": "0.5",
+                  "description": "Search radius in miles (default 0.5)"
+                },
+                {
+                  "disabled": false,
+                  "key": "vehicle_type",
+                  "value": "car",
+                  "description": "Type of vehicle"
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "20",
+                  "description": "Maximum number of results to return"
+                },
+                {
+                  "disabled": false,
+                  "key": "sort",
+                  "value": "distance",
+                  "description": "Sort order for results"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1b1e64e0-5d3b-4955-88c3-4faf26424a3b",
+              "name": "Successful search results",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "latitude",
+                      "value": "41.8827"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-87.6233"
+                    },
+                    {
+                      "key": "address",
+                      "value": "233 S Wacker Dr, Chicago, IL 60606"
+                    },
+                    {
+                      "key": "starts",
+                      "value": "2026-06-01T09:00:00Z"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "2026-06-01T17:00:00Z"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "1"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "distance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"facility_id\": \"fac_abc123\",\n      \"name\": \"Millennium Park Garage\",\n      \"address\": {\n        \"street\": \"233 S Wacker Dr\",\n        \"city\": \"Chicago\",\n        \"state\": \"IL\",\n        \"zip\": \"60606\",\n        \"country\": \"US\"\n      },\n      \"distance_miles\": 0.3,\n      \"price\": {\n        \"amount\": 15,\n        \"currency\": \"USD\",\n        \"display\": \"$15.00\"\n      },\n      \"availability\": {\n        \"available\": true,\n        \"spaces_available\": 9037\n      },\n      \"amenities\": [\n        \"covered\",\n        \"handicap_accessible\",\n        \"ev_charging\"\n      ],\n      \"rating\": 4.2\n    },\n    {\n      \"facility_id\": \"fac_abc123\",\n      \"name\": \"Millennium Park Garage\",\n      \"address\": {\n        \"street\": \"233 S Wacker Dr\",\n        \"city\": \"Chicago\",\n        \"state\": \"IL\",\n        \"zip\": \"60606\",\n        \"country\": \"US\"\n      },\n      \"distance_miles\": 0.3,\n      \"price\": {\n        \"amount\": 15,\n        \"currency\": \"USD\",\n        \"display\": \"$15.00\"\n      },\n      \"availability\": {\n        \"available\": true,\n        \"spaces_available\": 2787\n      },\n      \"amenities\": [\n        \"covered\",\n        \"handicap_accessible\",\n        \"ev_charging\"\n      ],\n      \"rating\": 4.2\n    }\n  ],\n  \"total\": 6572,\n  \"offset\": 8306,\n  \"limit\": 1626\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5fda805-ce5d-4fd1-96a9-021287257217",
+              "name": "Bad request - missing or invalid parameters",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "latitude",
+                      "value": "41.8827"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-87.6233"
+                    },
+                    {
+                      "key": "address",
+                      "value": "233 S Wacker Dr, Chicago, IL 60606"
+                    },
+                    {
+                      "key": "starts",
+                      "value": "2026-06-01T09:00:00Z"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "2026-06-01T17:00:00Z"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "1"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "distance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "985e8a57-82e9-4342-b995-17e0095c8253",
+              "name": "Unauthorized - invalid or missing API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "latitude",
+                      "value": "41.8827"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-87.6233"
+                    },
+                    {
+                      "key": "address",
+                      "value": "233 S Wacker Dr, Chicago, IL 60606"
+                    },
+                    {
+                      "key": "starts",
+                      "value": "2026-06-01T09:00:00Z"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "2026-06-01T17:00:00Z"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "1"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "distance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e3b5cb5-3201-4543-b61c-cc4f228a313c",
+              "name": "Rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "search"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "latitude",
+                      "value": "41.8827"
+                    },
+                    {
+                      "key": "longitude",
+                      "value": "-87.6233"
+                    },
+                    {
+                      "key": "address",
+                      "value": "233 S Wacker Dr, Chicago, IL 60606"
+                    },
+                    {
+                      "key": "starts",
+                      "value": "2026-06-01T09:00:00Z"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "2026-06-01T17:00:00Z"
+                    },
+                    {
+                      "key": "radius",
+                      "value": "1"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "20"
+                    },
+                    {
+                      "key": "sort",
+                      "value": "distance"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.spothero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "0469b8e0-0c3b-462e-bc83-32889a250d98",
+    "name": "SpotHero Parking Availability Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.\n\nContact Support:\n Name: SpotHero Partner Support\n Email: partner.support@spothero.com",
+      "type": "text/plain"
+    }
+  }
+}

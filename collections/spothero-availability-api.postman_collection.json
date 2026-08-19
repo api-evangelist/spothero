@@ -1,0 +1,377 @@
+{
+  "item": [
+    {
+      "id": "a9f810af-1495-4a24-8ec4-c17ab349cd7a",
+      "name": "Availability",
+      "description": {
+        "content": "Check real-time parking availability",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "6bdada04-033a-4cc8-90e1-d4e1bf6039b9",
+          "name": "Get Facility Availability",
+          "request": {
+            "name": "Get Facility Availability",
+            "description": {
+              "content": "Check real-time availability for a specific parking facility during a given time period. Returns current capacity, available spaces, and pricing for the requested window.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "facilities",
+                ":facility_id",
+                "availability"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "starts",
+                  "value": "<dateTime>",
+                  "description": "(Required) Start time for availability check in ISO 8601 format"
+                },
+                {
+                  "disabled": false,
+                  "key": "ends",
+                  "value": "<dateTime>",
+                  "description": "(Required) End time for availability check in ISO 8601 format"
+                },
+                {
+                  "disabled": false,
+                  "key": "vehicle_type",
+                  "value": "car",
+                  "description": "Type of vehicle"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "facility_id",
+                  "description": "(Required) Unique identifier for the parking facility"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "90c4e2aa-d362-4f64-8dbe-87ba342c23f8",
+              "name": "Availability information",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "starts",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"facility_id\": \"string\",\n  \"available\": false,\n  \"spaces_available\": 5021,\n  \"price\": {\n    \"amount\": 15,\n    \"currency\": \"USD\",\n    \"display\": \"$15.00\"\n  },\n  \"rates\": [\n    {\n      \"rate_id\": \"string\",\n      \"name\": \"Early Bird Rate\",\n      \"type\": \"monthly\",\n      \"price\": {\n        \"amount\": 15,\n        \"currency\": \"USD\",\n        \"display\": \"$15.00\"\n      },\n      \"starts\": \"1983-07-13T18:28:03.233Z\",\n      \"ends\": \"1997-12-29T21:19:12.612Z\",\n      \"vehicle_types\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"rate_id\": \"string\",\n      \"name\": \"Early Bird Rate\",\n      \"type\": \"event\",\n      \"price\": {\n        \"amount\": 15,\n        \"currency\": \"USD\",\n        \"display\": \"$15.00\"\n      },\n      \"starts\": \"1997-03-26T21:32:53.077Z\",\n      \"ends\": \"1985-10-08T16:41:05.637Z\",\n      \"vehicle_types\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6803cdcd-3872-401e-a4b4-5e6e0af7f3c8",
+              "name": "Unauthorized - invalid or missing API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "starts",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dbf3ec9d-0925-4716-b957-d62965d1ebe1",
+              "name": "Resource not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "starts",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f7c0ef65-8ee9-4448-8fb3-794f3341dcf1",
+              "name": "Rate limit exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "facilities",
+                    ":facility_id",
+                    "availability"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "starts",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "ends",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "key": "vehicle_type",
+                      "value": "car"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "facility_id",
+                      "description": "(Required) Unique identifier for the parking facility"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-API-Key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": \"string\",\n  \"message\": \"string\",\n  \"details\": {}\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.spothero.com/v2",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "X-API-Key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "fedf3afc-d5f5-40d1-8bb2-98322e2f6ae3",
+    "name": "SpotHero Parking Availability API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.\n\nContact Support:\n Name: SpotHero Partner Support\n Email: partner.support@spothero.com",
+      "type": "text/plain"
+    }
+  }
+}
