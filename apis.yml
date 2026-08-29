@@ -143,6 +143,9 @@ apis:
   - type: GettingStarted
     url: https://spothero.com/developers
 common:
+  - type: CapabilityMap
+    url: capabilities/spothero-capability-edges.yml
+    name: SpotHero Business Capability Map
   - type: PostmanWorkspace
     url: https://www.postman.com/kinlaneapi/spothero/overview
   - type: AgenticAccess
