@@ -143,6 +143,11 @@ apis:
   - type: GettingStarted
     url: https://spothero.com/developers
 common:
+  - type: ParentCompany
+    url: https://apis.io/providers/uber/
+    name: Uber
+    x-relationship: acquired
+    x-evidence: "SpotHero was acquired by Uber in 2026 to power parking reservation experiences within the Uber app."
   - type: CapabilityMap
     url: capabilities/spothero-capability-edges.yml
     name: SpotHero Business Capability Map
