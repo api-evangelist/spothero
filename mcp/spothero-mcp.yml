@@ -1,0 +1,33 @@
+generated: '2026-09-11'
+method: probed
+source: https://api.spothero.com/mcp
+status: published
+server:
+  name: spothero
+  transport: http
+  url: https://api.spothero.com/mcp
+deployment:
+  mode: remote
+  endpoint: https://api.spothero.com/mcp
+  verified: probed
+  probe: live
+  checked: '2026-09-11'
+  source: docs-check 2026-09-11 (endpoint found in the provider's own documentation, then probed)
+tools_count: 7
+tools:
+- name: cancel_checkout
+  description: ''
+- name: complete_checkout
+  description: ''
+- name: create_checkout
+  description: ''
+- name: get_checkout
+  description: ''
+- name: search_events
+  description: ''
+- name: search_parking
+  description: ''
+- name: update_checkout
+  description: ''
+tools_source: live tools/list via initialize handshake, 2026-09-11 (signals/audit_mcp_authorship.py --probe)
+authorship: provider
