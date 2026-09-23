@@ -1,11 +1,7 @@
 {
   "provider": "spothero",
   "sources": [
-    "spothero-availability-api-openapi.yml",
-    "spothero-facilities-api-openapi.yml",
-    "spothero-rates-api-openapi.yml",
-    "spothero-reservations-api-openapi.yml",
-    "spothero-search-api-openapi.yml"
+    "_original/spothero-parking-openapi.yml"
   ],
   "outputs": [
     "spothero-availability-api-openapi.yml",
@@ -17,6 +13,16 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "spothero-parking-openapi.yml: upgraded openapi 3.0.3 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "spothero-availability-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "spothero-facilities-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "spothero-rates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "spothero-reservations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "spothero-search-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

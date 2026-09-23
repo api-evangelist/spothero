@@ -1,6 +1,6 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: SpotHero Parking Availability Facilities API
+  title: SpotHero Parking Facilities API
   description: The SpotHero Parking API provides programmatic access to the largest network of off-street parking facilities in North America. Partners can search for available parking spots, check real-time availability, create and manage reservations, and access facility details including pricing, amenities, and directions. The API supports navigation apps, mobility platforms, connected car dashboards, event ticketing systems, and enterprise fleet management solutions.
   version: 2.0.0
   termsOfService: https://spothero.com/terms
@@ -64,24 +64,17 @@ components:
         closed:
           type: boolean
           description: Whether the facility is closed this day
-    Address:
+    Coordinates:
       type: object
       properties:
-        street:
-          type: string
-          example: 233 S Wacker Dr
-        city:
-          type: string
-          example: Chicago
-        state:
-          type: string
-          example: IL
-        zip:
-          type: string
-          example: '60606'
-        country:
-          type: string
-          example: US
+        latitude:
+          type: number
+          format: float
+          example: 41.8827
+        longitude:
+          type: number
+          format: float
+          example: -87.6233
     OperatingHours:
       type: object
       description: Operating hours for each day of the week
@@ -103,17 +96,24 @@ components:
         is_24_hours:
           type: boolean
           description: Whether the facility operates 24 hours a day
-    Coordinates:
+    Address:
       type: object
       properties:
-        latitude:
-          type: number
-          format: float
-          example: 41.8827
-        longitude:
-          type: number
-          format: float
-          example: -87.6233
+        street:
+          type: string
+          example: 233 S Wacker Dr
+        city:
+          type: string
+          example: Chicago
+        state:
+          type: string
+          example: IL
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: US
     Facility:
       type: object
       properties:
@@ -184,12 +184,6 @@ components:
           type: object
           description: Additional error details
   responses:
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Unauthorized - invalid or missing API key
       content:
@@ -198,6 +192,12 @@ components:
             $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
       content:
         application/json:
           schema:
