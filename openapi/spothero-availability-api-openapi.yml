@@ -76,22 +76,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    Price:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: Price amount
-          example: 15.0
-        currency:
-          type: string
-          description: Currency code (ISO 4217)
-          example: USD
-        display:
-          type: string
-          description: Human-readable price string
-          example: $15.00
     Availability:
       type: object
       properties:
@@ -144,6 +128,22 @@ components:
           items:
             type: string
           description: Vehicle types this rate applies to
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
     Error:
       type: object
       properties:
@@ -157,12 +157,6 @@ components:
           type: object
           description: Additional error details
   responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -171,6 +165,12 @@ components:
             $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
       content:
         application/json:
           schema:

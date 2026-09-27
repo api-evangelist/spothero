@@ -50,31 +50,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    DayHours:
-      type: object
-      properties:
-        open:
-          type: string
-          description: Opening time in HH:MM format
-          example: 06:00
-        close:
-          type: string
-          description: Closing time in HH:MM format
-          example: '22:00'
-        closed:
-          type: boolean
-          description: Whether the facility is closed this day
-    Coordinates:
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: float
-          example: 41.8827
-        longitude:
-          type: number
-          format: float
-          example: -87.6233
     OperatingHours:
       type: object
       description: Operating hours for each day of the week
@@ -183,13 +158,32 @@ components:
         details:
           type: object
           description: Additional error details
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 41.8827
+        longitude:
+          type: number
+          format: float
+          example: -87.6233
+    DayHours:
+      type: object
+      properties:
+        open:
+          type: string
+          description: Opening time in HH:MM format
+          example: 06:00
+        close:
+          type: string
+          description: Closing time in HH:MM format
+          example: '22:00'
+        closed:
+          type: boolean
+          description: Whether the facility is closed this day
   responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -198,6 +192,12 @@ components:
             $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
       content:
         application/json:
           schema:
