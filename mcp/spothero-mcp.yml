@@ -16,18 +16,32 @@ deployment:
 tools_count: 7
 tools:
 - name: cancel_checkout
-  description: ''
+  description: Use this tool to cancel an existing UCP checkout session. The checkout must have been previously
+    created and must not already be in a terminal state (completed or canceled). Returns the checkout
+    object with status set to canceled.
 - name: complete_checkout
-  description: ''
+  description: Use this tool to finalize a UCP checkout session for a parking reservation. The checkout
+    must have been previously created and must not already be in a terminal state (completed or canceled).
+    Returns the checkout object with an order confir
 - name: create_checkout
-  description: ''
+  description: Use this tool to initiate a UCP checkout for a parking reservation. Exactly one line item
+    must be provided. Put the SpotHero facility ID (from search_parking) in the line item's item.facility_id
+    field, and ensure the reservation end time is
 - name: get_checkout
-  description: ''
+  description: Use this tool to retrieve an existing UCP checkout by its checkout session ID. The checkout
+    must have been previously created and not yet expired.
 - name: search_events
-  description: ''
+  description: Searches for upcoming events using a free-text query. Supports many event types, including
+    sports matches, concerts, festivals, theatrical performances, and more. Use this tool only when a
+    user explicitly names or searches for an event/ente
 - name: search_parking
-  description: ''
+  description: Use this tool to search for available parking facilities near a given latitude and longitude
+    for the desired time window. Returns a JSON array of facilities.
 - name: update_checkout
-  description: ''
+  description: Use this tool to update an existing UCP checkout session by replacing its contents. The
+    entire checkout object must be provided with updated data. The checkout must have been previously
+    created and not yet expired. Returns the updated check
 tools_source: live tools/list via initialize handshake, 2026-09-11 (signals/audit_mcp_authorship.py --probe)
 authorship: provider
+descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
+  --descriptions, 2026-09-28
