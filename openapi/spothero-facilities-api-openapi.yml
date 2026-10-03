@@ -50,45 +50,6 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
-    OperatingHours:
-      type: object
-      description: Operating hours for each day of the week
-      properties:
-        monday:
-          $ref: '#/components/schemas/DayHours'
-        tuesday:
-          $ref: '#/components/schemas/DayHours'
-        wednesday:
-          $ref: '#/components/schemas/DayHours'
-        thursday:
-          $ref: '#/components/schemas/DayHours'
-        friday:
-          $ref: '#/components/schemas/DayHours'
-        saturday:
-          $ref: '#/components/schemas/DayHours'
-        sunday:
-          $ref: '#/components/schemas/DayHours'
-        is_24_hours:
-          type: boolean
-          description: Whether the facility operates 24 hours a day
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          example: 233 S Wacker Dr
-        city:
-          type: string
-          example: Chicago
-        state:
-          type: string
-          example: IL
-        zip:
-          type: string
-          example: '60606'
-        country:
-          type: string
-          example: US
     Facility:
       type: object
       properties:
@@ -146,6 +107,27 @@ components:
           - street
           - valet
           description: Type of parking facility
+    OperatingHours:
+      type: object
+      description: Operating hours for each day of the week
+      properties:
+        monday:
+          $ref: '#/components/schemas/DayHours'
+        tuesday:
+          $ref: '#/components/schemas/DayHours'
+        wednesday:
+          $ref: '#/components/schemas/DayHours'
+        thursday:
+          $ref: '#/components/schemas/DayHours'
+        friday:
+          $ref: '#/components/schemas/DayHours'
+        saturday:
+          $ref: '#/components/schemas/DayHours'
+        sunday:
+          $ref: '#/components/schemas/DayHours'
+        is_24_hours:
+          type: boolean
+          description: Whether the facility operates 24 hours a day
     Error:
       type: object
       properties:
@@ -169,6 +151,24 @@ components:
           type: number
           format: float
           example: -87.6233
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 233 S Wacker Dr
+        city:
+          type: string
+          example: Chicago
+        state:
+          type: string
+          example: IL
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: US
     DayHours:
       type: object
       properties:
@@ -184,6 +184,12 @@ components:
           type: boolean
           description: Whether the facility is closed this day
   responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -192,12 +198,6 @@ components:
             $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
       content:
         application/json:
           schema:

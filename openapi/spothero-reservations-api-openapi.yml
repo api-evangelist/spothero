@@ -179,6 +179,26 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Driver:
+      type: object
+      required:
+      - first_name
+      - last_name
+      - email
+      properties:
+        first_name:
+          type: string
+          example: Jane
+        last_name:
+          type: string
+          example: Smith
+        email:
+          type: string
+          format: email
+          example: jane.smith@example.com
+        phone:
+          type: string
+          example: '+13125551234'
     ReservationRequest:
       type: object
       required:
@@ -243,39 +263,6 @@ components:
           type: string
           description: Vehicle color
           example: Blue
-    Driver:
-      type: object
-      required:
-      - first_name
-      - last_name
-      - email
-      properties:
-        first_name:
-          type: string
-          example: Jane
-        last_name:
-          type: string
-          example: Smith
-        email:
-          type: string
-          format: email
-          example: jane.smith@example.com
-        phone:
-          type: string
-          example: '+13125551234'
-    ReservationList:
-      type: object
-      properties:
-        reservations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reservation'
-        total:
-          type: integer
-        offset:
-          type: integer
-        limit:
-          type: integer
     Error:
       type: object
       properties:
@@ -288,22 +275,6 @@ components:
         details:
           type: object
           description: Additional error details
-    Price:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: Price amount
-          example: 15.0
-        currency:
-          type: string
-          description: Currency code (ISO 4217)
-          example: USD
-        display:
-          type: string
-          description: Human-readable price string
-          example: $15.00
     Reservation:
       type: object
       properties:
@@ -361,15 +332,44 @@ components:
           type: string
           format: date-time
           description: Timestamp when reservation was last updated
+    ReservationList:
+      type: object
+      properties:
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
   responses:
-    NotFound:
-      description: Resource not found
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
@@ -380,8 +380,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
+    TooManyRequests:
+      description: Rate limit exceeded
       content:
         application/json:
           schema:
