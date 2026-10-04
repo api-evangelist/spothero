@@ -70,40 +70,19 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     TooManyRequests:
       description: Rate limit exceeded
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    RateList:
-      type: object
-      properties:
-        facility_id:
-          type: string
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rate'
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
     Price:
       type: object
       properties:
@@ -120,6 +99,27 @@ components:
           type: string
           description: Human-readable price string
           example: $15.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+    RateList:
+      type: object
+      properties:
+        facility_id:
+          type: string
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
     Rate:
       type: object
       properties:

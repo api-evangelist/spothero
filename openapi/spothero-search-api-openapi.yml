@@ -121,23 +121,54 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    BadRequest:
+      description: Bad request - missing or invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    SearchResults:
+    Price:
       type: object
       properties:
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/SearchResult'
-        total:
-          type: integer
-          description: Total number of facilities matching the search criteria
-        offset:
-          type: integer
-          description: Current offset for pagination
-        limit:
-          type: integer
-          description: Maximum results per page
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
     SearchResult:
       type: object
       properties:
@@ -174,18 +205,6 @@ components:
           format: float
           description: Average customer rating (0-5)
           example: 4.2
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
     Address:
       type: object
       properties:
@@ -204,22 +223,6 @@ components:
         country:
           type: string
           example: US
-    Price:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: Price amount
-          example: 15.0
-        currency:
-          type: string
-          description: Currency code (ISO 4217)
-          example: USD
-        display:
-          type: string
-          description: Human-readable price string
-          example: $15.00
     AvailabilitySummary:
       type: object
       properties:
@@ -229,25 +232,22 @@ components:
         spaces_available:
           type: integer
           description: Approximate number of open spaces
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - missing or invalid parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    SearchResults:
+      type: object
+      properties:
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/SearchResult'
+        total:
+          type: integer
+          description: Total number of facilities matching the search criteria
+        offset:
+          type: integer
+          description: Current offset for pagination
+        limit:
+          type: integer
+          description: Maximum results per page
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -75,37 +75,26 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Availability:
-      type: object
-      properties:
-        facility_id:
-          type: string
-          description: Unique facility identifier
-        available:
-          type: boolean
-          description: Whether parking is available for the requested time period
-        spaces_available:
-          type: integer
-          description: Estimated number of available spaces
-        price:
-          $ref: '#/components/schemas/Price'
-        rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/Rate'
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
     Price:
       type: object
       properties:
@@ -122,6 +111,18 @@ components:
           type: string
           description: Human-readable price string
           example: $15.00
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
     Rate:
       type: object
       properties:
@@ -156,25 +157,24 @@ components:
           items:
             type: string
           description: Vehicle types this rate applies to
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+    Availability:
+      type: object
+      properties:
+        facility_id:
+          type: string
+          description: Unique facility identifier
+        available:
+          type: boolean
+          description: Whether parking is available for the requested time period
+        spaces_available:
+          type: integer
+          description: Estimated number of available spaces
+        price:
+          $ref: '#/components/schemas/Price'
+        rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/Rate'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
