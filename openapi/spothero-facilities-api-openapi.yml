@@ -49,26 +49,33 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    DayHours:
+      type: object
+      properties:
+        open:
+          type: string
+          description: Opening time in HH:MM format
+          example: 06:00
+        close:
+          type: string
+          description: Closing time in HH:MM format
+          example: '22:00'
+        closed:
+          type: boolean
+          description: Whether the facility is closed this day
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
     OperatingHours:
       type: object
       description: Operating hours for each day of the week
@@ -90,6 +97,35 @@ components:
         is_24_hours:
           type: boolean
           description: Whether the facility operates 24 hours a day
+    Address:
+      type: object
+      properties:
+        street:
+          type: string
+          example: 233 S Wacker Dr
+        city:
+          type: string
+          example: Chicago
+        state:
+          type: string
+          example: IL
+        zip:
+          type: string
+          example: '60606'
+        country:
+          type: string
+          example: US
+    Coordinates:
+      type: object
+      properties:
+        latitude:
+          type: number
+          format: float
+          example: 41.8827
+        longitude:
+          type: number
+          format: float
+          example: -87.6233
     Facility:
       type: object
       properties:
@@ -147,61 +183,25 @@ components:
           - street
           - valet
           description: Type of parking facility
-    Coordinates:
-      type: object
-      properties:
-        latitude:
-          type: number
-          format: float
-          example: 41.8827
-        longitude:
-          type: number
-          format: float
-          example: -87.6233
-    DayHours:
-      type: object
-      properties:
-        open:
-          type: string
-          description: Opening time in HH:MM format
-          example: 06:00
-        close:
-          type: string
-          description: Closing time in HH:MM format
-          example: '22:00'
-        closed:
-          type: boolean
-          description: Whether the facility is closed this day
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
-    Address:
-      type: object
-      properties:
-        street:
-          type: string
-          example: 233 S Wacker Dr
-        city:
-          type: string
-          example: Chicago
-        state:
-          type: string
-          example: IL
-        zip:
-          type: string
-          example: '60606'
-        country:
-          type: string
-          example: US
+  responses:
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

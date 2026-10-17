@@ -121,25 +121,6 @@ paths:
         '429':
           $ref: '#/components/responses/TooManyRequests'
 components:
-  responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    TooManyRequests:
-      description: Rate limit exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - missing or invalid parameters
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
     Price:
       type: object
@@ -157,18 +138,6 @@ components:
           type: string
           description: Human-readable price string
           example: $15.00
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
     SearchResult:
       type: object
       properties:
@@ -205,6 +174,27 @@ components:
           format: float
           description: Average customer rating (0-5)
           example: 4.2
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
+    AvailabilitySummary:
+      type: object
+      properties:
+        available:
+          type: boolean
+          description: Whether parking is available
+        spaces_available:
+          type: integer
+          description: Approximate number of open spaces
     Address:
       type: object
       properties:
@@ -223,15 +213,6 @@ components:
         country:
           type: string
           example: US
-    AvailabilitySummary:
-      type: object
-      properties:
-        available:
-          type: boolean
-          description: Whether parking is available
-        spaces_available:
-          type: integer
-          description: Approximate number of open spaces
     SearchResults:
       type: object
       properties:
@@ -248,6 +229,25 @@ components:
         limit:
           type: integer
           description: Maximum results per page
+  responses:
+    BadRequest:
+      description: Bad request - missing or invalid parameters
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    TooManyRequests:
+      description: Rate limit exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

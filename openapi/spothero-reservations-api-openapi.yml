@@ -179,6 +179,47 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
 components:
   schemas:
+    Price:
+      type: object
+      properties:
+        amount:
+          type: number
+          format: float
+          description: Price amount
+          example: 15.0
+        currency:
+          type: string
+          description: Currency code (ISO 4217)
+          example: USD
+        display:
+          type: string
+          description: Human-readable price string
+          example: $15.00
+    ReservationList:
+      type: object
+      properties:
+        reservations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Reservation'
+        total:
+          type: integer
+        offset:
+          type: integer
+        limit:
+          type: integer
+    Error:
+      type: object
+      properties:
+        code:
+          type: string
+          description: Error code
+        message:
+          type: string
+          description: Human-readable error message
+        details:
+          type: object
+          description: Additional error details
     Vehicle:
       type: object
       properties:
@@ -209,19 +250,40 @@ components:
           type: string
           description: Vehicle color
           example: Blue
-    ReservationList:
+    ReservationRequest:
       type: object
+      required:
+      - facility_id
+      - rate_id
+      - starts
+      - ends
+      - driver
+      - vehicle
       properties:
-        reservations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Reservation'
-        total:
-          type: integer
-        offset:
-          type: integer
-        limit:
-          type: integer
+        facility_id:
+          type: string
+          description: Unique identifier for the parking facility
+          example: fac_abc123
+        rate_id:
+          type: string
+          description: Unique identifier for the selected rate
+          example: rate_early_bird
+        starts:
+          type: string
+          format: date-time
+          description: Reservation start time in ISO 8601 format
+        ends:
+          type: string
+          format: date-time
+          description: Reservation end time in ISO 8601 format
+        driver:
+          $ref: '#/components/schemas/Driver'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        partner_reference:
+          type: string
+          description: Optional partner-side reference identifier for tracking
+          example: order_99887766
     Reservation:
       type: object
       properties:
@@ -279,34 +341,6 @@ components:
           type: string
           format: date-time
           description: Timestamp when reservation was last updated
-    Price:
-      type: object
-      properties:
-        amount:
-          type: number
-          format: float
-          description: Price amount
-          example: 15.0
-        currency:
-          type: string
-          description: Currency code (ISO 4217)
-          example: USD
-        display:
-          type: string
-          description: Human-readable price string
-          example: $15.00
-    Error:
-      type: object
-      properties:
-        code:
-          type: string
-          description: Error code
-        message:
-          type: string
-          description: Human-readable error message
-        details:
-          type: object
-          description: Additional error details
     Driver:
       type: object
       required:
@@ -327,43 +361,9 @@ components:
         phone:
           type: string
           example: '+13125551234'
-    ReservationRequest:
-      type: object
-      required:
-      - facility_id
-      - rate_id
-      - starts
-      - ends
-      - driver
-      - vehicle
-      properties:
-        facility_id:
-          type: string
-          description: Unique identifier for the parking facility
-          example: fac_abc123
-        rate_id:
-          type: string
-          description: Unique identifier for the selected rate
-          example: rate_early_bird
-        starts:
-          type: string
-          format: date-time
-          description: Reservation start time in ISO 8601 format
-        ends:
-          type: string
-          format: date-time
-          description: Reservation end time in ISO 8601 format
-        driver:
-          $ref: '#/components/schemas/Driver'
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        partner_reference:
-          type: string
-          description: Optional partner-side reference identifier for tracking
-          example: order_99887766
   responses:
-    Unauthorized:
-      description: Unauthorized - invalid or missing API key
+    BadRequest:
+      description: Bad request - missing or invalid parameters
       content:
         application/json:
           schema:
@@ -374,14 +374,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
+    Unauthorized:
+      description: Unauthorized - invalid or missing API key
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    BadRequest:
-      description: Bad request - missing or invalid parameters
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
