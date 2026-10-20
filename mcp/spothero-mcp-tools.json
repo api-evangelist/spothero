@@ -1,0 +1,1070 @@
+{
+  "endpoint": "https://api.spothero.com/mcp",
+  "captured": "2026-10-20",
+  "method": "initialize + tools/list (anonymous, no tool called; roadmap#992)",
+  "protocol_version": "2025-06-18",
+  "server_info": {
+    "name": "mcp-server",
+    "version": ""
+  },
+  "result": {
+    "tools": [
+      {
+        "annotations": {
+          "idempotentHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Use this tool to cancel an existing UCP checkout session. The checkout must have been previously created and must not already be in a terminal state (completed or canceled). Returns the checkout object with status set to canceled.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "description": "URL of the calling agent's UCP capability profile document"
+                    }
+                  },
+                  "description": "Identifies the calling agent to SpotHero. Required on every checkout tool call.",
+                  "required": [
+                    "profile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "ucp-agent"
+              ],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "description": "The checkout session ID to cancel"
+            }
+          },
+          "required": [
+            "meta",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "name": "cancel_checkout",
+        "title": "Cancel Checkout"
+      },
+      {
+        "annotations": {
+          "idempotentHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Use this tool to finalize a UCP checkout session for a parking reservation. The checkout must have been previously created and must not already be in a terminal state (completed or canceled). Returns the checkout object with an order confirmation containing a parking pass link (the permalink_url field).",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "description": "URL of the calling agent's UCP capability profile document"
+                    }
+                  },
+                  "description": "Identifies the calling agent to SpotHero. Required on every checkout tool call.",
+                  "required": [
+                    "profile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "ucp-agent"
+              ],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "description": "The checkout session ID to complete"
+            },
+            "checkout": {
+              "type": "object",
+              "properties": {
+                "payment": {
+                  "type": "object",
+                  "properties": {
+                    "instruments": {
+                      "type": [
+                        "null",
+                        "array"
+                      ],
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "credential": {
+                            "type": "object",
+                            "properties": {
+                              "token": {
+                                "type": "string",
+                                "description": "The Stripe token object as a JSON string, produced by tokenizing the payment method with the publishable key from the SpotHero UCP profile. Must contain a non-empty 'id' and 'card.tokenization_method'."
+                              }
+                            },
+                            "required": [
+                              "token"
+                            ],
+                            "additionalProperties": false
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "Caller-generated identifier for this instrument. Stored for correlation only."
+                          },
+                          "handler_id": {
+                            "type": "string",
+                            "description": "ID of the payment handler from the SpotHero UCP profile, e.g. 'gpay_handler'."
+                          },
+                          "type": {
+                            "type": "string",
+                            "description": "Instrument type declared by the handler, e.g. 'CARD'."
+                          }
+                        },
+                        "required": [
+                          "credential",
+                          "id",
+                          "handler_id",
+                          "type"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "description": "Payment instruments to charge. Exactly one instrument is supported; split payments are not."
+                    }
+                  },
+                  "required": [
+                    "instruments"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "payment"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "meta",
+            "id",
+            "checkout"
+          ],
+          "additionalProperties": false
+        },
+        "name": "complete_checkout",
+        "title": "Complete Checkout"
+      },
+      {
+        "annotations": {
+          "idempotentHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Use this tool to initiate a UCP checkout for a parking reservation. Exactly one line item must be provided. Put the SpotHero facility ID (from search_parking) in the line item's item.facility_id field, and ensure the reservation end time is in the future. The line item's totals must resolve to the total_price of the chosen search_parking rate: either send one entry of type 'total', or send the rate's price_breakdown components, which are summed. Returns a checkout object with a unique ID that can be used to retrieve or complete the checkout.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "description": "URL of the calling agent's UCP capability profile document"
+                    }
+                  },
+                  "description": "Identifies the calling agent to SpotHero. Required on every checkout tool call.",
+                  "required": [
+                    "profile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "ucp-agent"
+              ],
+              "additionalProperties": false
+            },
+            "checkout": {
+              "type": "object",
+              "properties": {
+                "buyer": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "Buyer email address. Required; the parking pass is issued to this address."
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "description": "Buyer phone number in E.164 format, e.g. +16505551234."
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "phone_number"
+                  ],
+                  "additionalProperties": false
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO 4217 currency code for the checkout. Must be USD or CAD, and must match the currency_code of the chosen search_parking rate."
+                    }
+                  },
+                  "required": [
+                    "currency"
+                  ],
+                  "additionalProperties": false
+                },
+                "line_items": {
+                  "type": [
+                    "null",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "item": {
+                        "type": "object",
+                        "properties": {
+                          "facility_id": {
+                            "type": "string",
+                            "description": "SpotHero facility to reserve. Must be the facility_id string returned by search_parking."
+                          },
+                          "starts": {
+                            "type": "string",
+                            "description": "Start of the parking reservation as an RFC 3339 datetime with offset, e.g. 2026-06-01T10:00:00-05:00. Must be earlier than ends. Use the offered_starts of the chosen search_parking rate."
+                          },
+                          "ends": {
+                            "type": "string",
+                            "description": "End of the parking reservation as an RFC 3339 datetime with offset. Must be in the future and later than starts. Use the offered_ends of the chosen search_parking rate."
+                          },
+                          "license_plate": {
+                            "type": "string",
+                            "description": "Vehicle license plate number. Optional, but required for some facilities."
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "Caller-generated identifier for the item being purchased. SpotHero does not issue or resolve this value; it is stored and echoed back on the checkout. Any stable string is acceptable."
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Human-readable name of the item, e.g. the facility_name from search_parking. Optional; stored and echoed back for display only."
+                          },
+                          "price": {
+                            "type": "integer",
+                            "description": "Unit price in the smallest currency unit (cents). Optional; stored and echoed back for display only, as the charged amount comes from totals."
+                          }
+                        },
+                        "required": [
+                          "facility_id",
+                          "starts",
+                          "ends",
+                          "id",
+                          "title",
+                          "price"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Caller-generated identifier for this line item. SpotHero does not issue or resolve this value; it is stored and echoed back on the checkout. Any stable string is acceptable."
+                      },
+                      "totals": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "display_text": {
+                              "type": "string",
+                              "description": "Human-readable label for this line, e.g. 'Service Fee'. Use the matching short_description from search_parking's rates.price_breakdown."
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Kind of price line. Either 'total' for the authoritative charge, or the type of a single price component copied from search_parking's rates.price_breakdown[].type (e.g. 'rental', 'blanket_fee'). If no 'total' entry is present, all entries are summed and must add up to the rate's total_price."
+                            },
+                            "amount": {
+                              "type": "integer",
+                              "description": "Amount in the smallest currency unit (cents for USD/CAD). Must match the corresponding search_parking value_cents exactly; a mismatch at complete_checkout returns a totals_changed error."
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "description": "Price lines for this item. At least one entry is required. The resolved amount (the 'total' entry, or the sum of all entries when there is none) must equal the total_price.value_cents of the chosen search_parking rate."
+                      },
+                      "quantity": {
+                        "type": "integer",
+                        "description": "Number of units. A parking reservation is always 1."
+                      }
+                    },
+                    "required": [
+                      "item",
+                      "id",
+                      "totals",
+                      "quantity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "description": "The items being purchased. Exactly one line item is supported; a checkout covers a single parking reservation."
+                }
+              },
+              "required": [
+                "buyer",
+                "context",
+                "line_items"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "meta",
+            "checkout"
+          ],
+          "additionalProperties": false
+        },
+        "name": "create_checkout",
+        "title": "Create Checkout"
+      },
+      {
+        "annotations": {
+          "idempotentHint": true,
+          "readOnlyHint": true
+        },
+        "description": "Use this tool to retrieve an existing UCP checkout by its checkout session ID. The checkout must have been previously created and not yet expired.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "description": "URL of the calling agent's UCP capability profile document"
+                    }
+                  },
+                  "description": "Identifies the calling agent to SpotHero. Required on every checkout tool call.",
+                  "required": [
+                    "profile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "ucp-agent"
+              ],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "description": "The checkout session ID returned by create_checkout"
+            }
+          },
+          "required": [
+            "meta",
+            "id"
+          ],
+          "additionalProperties": false
+        },
+        "name": "get_checkout",
+        "title": "Get Checkout"
+      },
+      {
+        "annotations": {
+          "idempotentHint": true,
+          "readOnlyHint": true
+        },
+        "description": "Searches for upcoming events using a free-text query. Supports many event types, including sports matches, concerts, festivals, theatrical performances, and more. Use this tool only when a user explicitly names or searches for an event/entertainment occurrence (e.g., 'Yankees game', 'Taylor Swift concert'). Do not use this for point-of-interest, landmark, or address searches.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "search_query": {
+              "type": "string",
+              "description": "Free-text search query for events"
+            }
+          },
+          "required": [
+            "search_query"
+          ],
+          "additionalProperties": false
+        },
+        "name": "search_events",
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "results": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "parking_period": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "starts": {
+                        "type": "string"
+                      },
+                      "ends": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "starts",
+                      "ends"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "destination": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "destination_id": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "time_zone": {
+                        "type": "string"
+                      },
+                      "google_place_ids": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "latitude": {
+                        "type": "number"
+                      },
+                      "longitude": {
+                        "type": "number"
+                      }
+                    },
+                    "required": [
+                      "destination_id",
+                      "city",
+                      "title",
+                      "time_zone",
+                      "google_place_ids",
+                      "latitude",
+                      "longitude"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "event_id": {
+                    "type": "string"
+                  },
+                  "title": {
+                    "type": "string"
+                  },
+                  "starts": {
+                    "type": "string"
+                  },
+                  "ends": {
+                    "type": "string"
+                  },
+                  "description": {
+                    "type": "string"
+                  },
+                  "short_description": {
+                    "type": "string"
+                  },
+                  "popularity_score": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "parking_period",
+                  "destination",
+                  "event_id",
+                  "title",
+                  "starts",
+                  "ends",
+                  "description",
+                  "short_description",
+                  "popularity_score"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "results"
+          ],
+          "additionalProperties": false
+        },
+        "title": "Search Events"
+      },
+      {
+        "annotations": {
+          "idempotentHint": true,
+          "readOnlyHint": true
+        },
+        "description": "Use this tool to search for available parking facilities near a given latitude and longitude for the desired time window. Returns a JSON array of facilities. ",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "starts": {
+              "type": "string",
+              "description": "Start of the desired parking window. Must be a full ISO 8601 datetime with a timezone offset — e.g. 2025-06-01T14:30:00-05:00 or 2025-06-01T19:30:00Z. If the user has not specified a date, time, or timezone, ask before calling this tool."
+            },
+            "ends": {
+              "type": "string",
+              "description": "End of the desired parking window. Must be a full ISO 8601 datetime with a timezone offset — e.g. 2025-06-01T16:30:00-05:00 or 2025-06-01T21:30:00Z. If the user has not specified a date, time, or timezone, ask before calling this tool."
+            },
+            "lat": {
+              "type": "number",
+              "description": "Latitude of the area to search"
+            },
+            "lon": {
+              "type": "number",
+              "description": "Longitude of the area to search"
+            }
+          },
+          "required": [
+            "starts",
+            "ends",
+            "lat",
+            "lon"
+          ],
+          "additionalProperties": false
+        },
+        "name": "search_parking",
+        "outputSchema": {
+          "type": "object",
+          "properties": {
+            "results": {
+              "type": [
+                "null",
+                "array"
+              ],
+              "items": {
+                "type": "object",
+                "properties": {
+                  "hours_of_operation": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "periods": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "hours_type": {
+                              "type": "string"
+                            },
+                            "first_day": {
+                              "type": "string"
+                            },
+                            "last_day": {
+                              "type": "string"
+                            },
+                            "start_time": {
+                              "type": "string"
+                            },
+                            "end_time": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "hours_type",
+                            "first_day",
+                            "last_day",
+                            "start_time",
+                            "end_time"
+                          ],
+                          "additionalProperties": false
+                        }
+                      },
+                      "text": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "string"
+                        }
+                      },
+                      "always_open": {
+                        "type": "boolean"
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "address": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "street_address": {
+                        "type": "string"
+                      },
+                      "city": {
+                        "type": "string"
+                      },
+                      "state": {
+                        "type": "string"
+                      },
+                      "postal_code": {
+                        "type": "string"
+                      }
+                    },
+                    "required": [
+                      "street_address",
+                      "city",
+                      "state",
+                      "postal_code"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "rating": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "average": {
+                        "type": "number"
+                      },
+                      "count": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 4294967295
+                      }
+                    },
+                    "required": [
+                      "average",
+                      "count"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "clearance_inches": {
+                    "type": [
+                      "null",
+                      "integer"
+                    ],
+                    "minimum": 0,
+                    "maximum": 4294967295
+                  },
+                  "distance": {
+                    "type": [
+                      "null",
+                      "object"
+                    ],
+                    "properties": {
+                      "linear_meters": {
+                        "type": "number"
+                      },
+                      "walking_meters": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 4294967295
+                      },
+                      "duration_minutes": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 4294967295
+                      }
+                    },
+                    "additionalProperties": false
+                  },
+                  "navigation_tip": {
+                    "type": "string"
+                  },
+                  "facility_name": {
+                    "type": "string"
+                  },
+                  "facility_id": {
+                    "type": "string"
+                  },
+                  "facility_type": {
+                    "type": "string"
+                  },
+                  "restrictions": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "tags": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "Tags highlight notable facilities within a set of search results. Some example tags are: 'Shortest Walk', 'Best Value', 'Highest Rated', and 'Official Venue Parking'"
+                  },
+                  "images": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "google_place_ids": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "rates": {
+                    "type": [
+                      "null",
+                      "array"
+                    ],
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "offered_starts": {
+                          "type": "string"
+                        },
+                        "offered_ends": {
+                          "type": "string"
+                        },
+                        "checkout_url": {
+                          "type": "string",
+                          "description": "A link to the checkout webpage for this facility rate. Used when a user wants to purchase parking."
+                        },
+                        "total_price": {
+                          "type": [
+                            "null",
+                            "object"
+                          ],
+                          "properties": {
+                            "currency_code": {
+                              "type": "string"
+                            },
+                            "value_cents": {
+                              "type": "integer"
+                            }
+                          },
+                          "required": [
+                            "currency_code",
+                            "value_cents"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "price_breakdown": {
+                          "type": [
+                            "null",
+                            "array"
+                          ],
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "price": {
+                                "type": [
+                                  "null",
+                                  "object"
+                                ],
+                                "properties": {
+                                  "currency_code": {
+                                    "type": "string"
+                                  },
+                                  "value_cents": {
+                                    "type": "integer"
+                                  }
+                                },
+                                "required": [
+                                  "currency_code",
+                                  "value_cents"
+                                ],
+                                "additionalProperties": false
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "short_description": {
+                                "type": "string"
+                              },
+                              "full_description": {
+                                "type": "string"
+                              }
+                            },
+                            "required": [
+                              "type",
+                              "short_description",
+                              "full_description"
+                            ],
+                            "additionalProperties": false
+                          }
+                        },
+                        "amenities": {
+                          "type": [
+                            "null",
+                            "array"
+                          ],
+                          "items": {
+                            "type": "string"
+                          }
+                        }
+                      },
+                      "required": [
+                        "offered_starts",
+                        "offered_ends"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "allow_reservations_outside_hours_of_operations": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "facility_name",
+                  "facility_id"
+                ],
+                "additionalProperties": false
+              }
+            }
+          },
+          "required": [
+            "results"
+          ],
+          "additionalProperties": false
+        },
+        "title": "Search Parking"
+      },
+      {
+        "annotations": {
+          "idempotentHint": false,
+          "readOnlyHint": false
+        },
+        "description": "Use this tool to update an existing UCP checkout session by replacing its contents. The entire checkout object must be provided with updated data. The checkout must have been previously created and not yet expired. Returns the updated checkout object.",
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "meta": {
+              "type": "object",
+              "properties": {
+                "ucp-agent": {
+                  "type": "object",
+                  "properties": {
+                    "profile": {
+                      "type": "string",
+                      "description": "URL of the calling agent's UCP capability profile document"
+                    }
+                  },
+                  "description": "Identifies the calling agent to SpotHero. Required on every checkout tool call.",
+                  "required": [
+                    "profile"
+                  ],
+                  "additionalProperties": false
+                }
+              },
+              "required": [
+                "ucp-agent"
+              ],
+              "additionalProperties": false
+            },
+            "id": {
+              "type": "string",
+              "description": "The checkout session ID returned by create_checkout"
+            },
+            "checkout": {
+              "type": "object",
+              "properties": {
+                "buyer": {
+                  "type": "object",
+                  "properties": {
+                    "email": {
+                      "type": "string",
+                      "description": "Buyer email address. Required; the parking pass is issued to this address."
+                    },
+                    "phone_number": {
+                      "type": "string",
+                      "description": "Buyer phone number in E.164 format, e.g. +16505551234."
+                    }
+                  },
+                  "required": [
+                    "email",
+                    "phone_number"
+                  ],
+                  "additionalProperties": false
+                },
+                "context": {
+                  "type": "object",
+                  "properties": {
+                    "currency": {
+                      "type": "string",
+                      "description": "ISO 4217 currency code for the checkout. Must be USD or CAD, and must match the currency_code of the chosen search_parking rate."
+                    }
+                  },
+                  "required": [
+                    "currency"
+                  ],
+                  "additionalProperties": false
+                },
+                "line_items": {
+                  "type": [
+                    "null",
+                    "array"
+                  ],
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "item": {
+                        "type": "object",
+                        "properties": {
+                          "facility_id": {
+                            "type": "string",
+                            "description": "SpotHero facility to reserve. Must be the facility_id string returned by search_parking."
+                          },
+                          "starts": {
+                            "type": "string",
+                            "description": "Start of the parking reservation as an RFC 3339 datetime with offset, e.g. 2026-06-01T10:00:00-05:00. Must be earlier than ends. Use the offered_starts of the chosen search_parking rate."
+                          },
+                          "ends": {
+                            "type": "string",
+                            "description": "End of the parking reservation as an RFC 3339 datetime with offset. Must be in the future and later than starts. Use the offered_ends of the chosen search_parking rate."
+                          },
+                          "license_plate": {
+                            "type": "string",
+                            "description": "Vehicle license plate number. Optional, but required for some facilities."
+                          },
+                          "id": {
+                            "type": "string",
+                            "description": "Caller-generated identifier for the item being purchased. SpotHero does not issue or resolve this value; it is stored and echoed back on the checkout. Any stable string is acceptable."
+                          },
+                          "title": {
+                            "type": "string",
+                            "description": "Human-readable name of the item, e.g. the facility_name from search_parking. Optional; stored and echoed back for display only."
+                          },
+                          "price": {
+                            "type": "integer",
+                            "description": "Unit price in the smallest currency unit (cents). Optional; stored and echoed back for display only, as the charged amount comes from totals."
+                          }
+                        },
+                        "required": [
+                          "facility_id",
+                          "starts",
+                          "ends",
+                          "id",
+                          "title",
+                          "price"
+                        ],
+                        "additionalProperties": false
+                      },
+                      "id": {
+                        "type": "string",
+                        "description": "Caller-generated identifier for this line item. SpotHero does not issue or resolve this value; it is stored and echoed back on the checkout. Any stable string is acceptable."
+                      },
+                      "totals": {
+                        "type": [
+                          "null",
+                          "array"
+                        ],
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "display_text": {
+                              "type": "string",
+                              "description": "Human-readable label for this line, e.g. 'Service Fee'. Use the matching short_description from search_parking's rates.price_breakdown."
+                            },
+                            "type": {
+                              "type": "string",
+                              "description": "Kind of price line. Either 'total' for the authoritative charge, or the type of a single price component copied from search_parking's rates.price_breakdown[].type (e.g. 'rental', 'blanket_fee'). If no 'total' entry is present, all entries are summed and must add up to the rate's total_price."
+                            },
+                            "amount": {
+                              "type": "integer",
+                              "description": "Amount in the smallest currency unit (cents for USD/CAD). Must match the corresponding search_parking value_cents exactly; a mismatch at complete_checkout returns a totals_changed error."
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "amount"
+                          ],
+                          "additionalProperties": false
+                        },
+                        "description": "Price lines for this item. At least one entry is required. The resolved amount (the 'total' entry, or the sum of all entries when there is none) must equal the total_price.value_cents of the chosen search_parking rate."
+                      },
+                      "quantity": {
+                        "type": "integer",
+                        "description": "Number of units. A parking reservation is always 1."
+                      }
+                    },
+                    "required": [
+                      "item",
+                      "id",
+                      "totals",
+                      "quantity"
+                    ],
+                    "additionalProperties": false
+                  },
+                  "description": "The items being purchased. Exactly one line item is supported; a checkout covers a single parking reservation."
+                }
+              },
+              "description": "The complete replacement checkout payload. Any field omitted here is dropped from the session.",
+              "required": [
+                "buyer",
+                "context",
+                "line_items"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "meta",
+            "id",
+            "checkout"
+          ],
+          "additionalProperties": false
+        },
+        "name": "update_checkout",
+        "title": "Update Checkout"
+      }
+    ]
+  }
+}
