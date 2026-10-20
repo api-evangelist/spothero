@@ -22,25 +22,30 @@ tools:
 - name: complete_checkout
   description: Use this tool to finalize a UCP checkout session for a parking reservation. The checkout
     must have been previously created and must not already be in a terminal state (completed or canceled).
-    Returns the checkout object with an order confir
+    Returns the checkout object with an order confirmation containing a parking pass link (the permalink_url
+    field).
 - name: create_checkout
-  description: Use this tool to initiate a UCP checkout for a parking reservation. Exactly one line item
-    must be provided. Put the SpotHero facility ID (from search_parking) in the line item's item.facility_id
-    field, and ensure the reservation end time is
+  description: 'Use this tool to initiate a UCP checkout for a parking reservation. Exactly one line item
+    must be provided. Put the SpotHero facility ID (from search_parking) in the line item''s item.facility_id
+    field, and ensure the reservation end time is in the future. The line item''s totals must resolve
+    to the total_price of the chosen search_parking rate: either send one entry of type ''total'', or
+    send the rate''s price_breakdown components, which are summed. Returns a checkout object with a unique
+    ID that can be used to retrieve or complete the checkout.'
 - name: get_checkout
   description: Use this tool to retrieve an existing UCP checkout by its checkout session ID. The checkout
     must have been previously created and not yet expired.
 - name: search_events
   description: Searches for upcoming events using a free-text query. Supports many event types, including
     sports matches, concerts, festivals, theatrical performances, and more. Use this tool only when a
-    user explicitly names or searches for an event/ente
+    user explicitly names or searches for an event/entertainment occurrence (e.g., 'Yankees game', 'Taylor
+    Swift concert'). Do not use this for point-of-interest, landmark, or address searches.
 - name: search_parking
   description: Use this tool to search for available parking facilities near a given latitude and longitude
     for the desired time window. Returns a JSON array of facilities.
 - name: update_checkout
   description: Use this tool to update an existing UCP checkout session by replacing its contents. The
     entire checkout object must be provided with updated data. The checkout must have been previously
-    created and not yet expired. Returns the updated check
+    created and not yet expired. Returns the updated checkout object.
 tools_source: live tools/list via initialize handshake, 2026-09-11 (signals/audit_mcp_authorship.py --probe)
 authorship: provider
 descriptions_source: live tools/list (authorship probe or saved capture); filled by backfill-tools-from-authorship.py
